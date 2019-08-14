@@ -1,0 +1,21 @@
+{
+  "name": "row-to-object",
+  "version": "0.0.1",
+  "description": "Convert a row (csv, excel) to a structured object",
+  "main": "index.js",
+  "directories": {
+    "test": "node --expose-internals ./node_modules/.bin/mocha $(find test -name '*spec.js') --exit --recursive"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jaap van der Kreeft",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.15"
+  },
+  "devDependencies": {
+    "mocha": "^6.2.0",
+    "chai": "^4.2.0"
+  }
+}
