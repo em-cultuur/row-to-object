@@ -1,6 +1,6 @@
 {
   "name": "row-to-object",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Convert a row (csv, excel) to a structured object",
   "main": "index.js",
   "directories": {
