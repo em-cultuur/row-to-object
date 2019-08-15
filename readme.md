@@ -11,10 +11,44 @@ $ npm install @toxus/row-to-object --save
 ## Usage
 
 ```js
-const cnf = require('@toxus/row-to-object');
+const Conv = require('@toxus/row-to-object');
 
-function convert() {
+let converter = new Conv({ type: 'fieldName', fields: {
+  id: 'UserNumber',
+  name: 'Name',
+  location: {
+    street: 'Street',
+    city: 'City'
+  },
+  email: [
+    { type: '=work', value: 'WorkEmail'},
+    { type: '=newsletter', value: 'Newsletter', _required: true}
+  ]
+}})
+
+let data = [ 
+        ['UserNumber', 'Name', 'Amount', 'Street', 'City', 'WorkEmail', 'Newsletter'], 
+        ['340', 'John Doe', '8,35', 'mainstreet 12', 'Amsterdam', 'work@doe.com', 'news@doe.com'], 
+        ['463', 'Jane Doe', '10,95', 'localbase 55', 'Rotterdam', 'none@work.com', '']
+     ];
+for (let l = 0; l < data.length; l++) {
+  let obj = converter.convert(data[l]);
+  if (obj) {
+    console.log(obj)
+  }
 }
+// will output
+// {id: '340', name: 'John Doe', 
+//    location: {street: 'mainstreet 12', city: 'Amsterdam'}, 
+//    email: [
+//      {type: 'work', value: 'work@doe.com}, 
+//      type: 'newsletter, value: 'news@doe.com'}
+//    ]
+// {id: '463', name: 'Jane Doe', 
+//    location: {street: 'localbase 55', city: 'Rotterdam'}
+//    email: [{type: 'work', value: 'none@work.com'}]
+// }
+
 
 ````
 ## Configuring
@@ -32,10 +66,20 @@ let config = {
 ### literal values
 To add a literal value to the final object, the value has to be preceded with an =. 
 Example: city: "=Amsterdam" 
+
 ### field value
 There are two way to retrieve data from the row: direct (fullName: "name") or using a structure 
 (fullName: _value: "name"). With the later structure the field can made required by adding the 
 _required flag.
+
+The fields can be addressed in different ways:
+- by the name given in the first column (type == fieldName)
+- by the number (index) of the column (type == index)
+- by the spreadsheet column name (A, AD) (type == letters)
+
+When creating an object the format should be specified (default: index). The first row will be automatically skipped 
+if the type is fieldName
+
 ### object
 A nested object can be created from the row. An example:
 ```js

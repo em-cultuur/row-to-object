@@ -7,7 +7,7 @@
     "test": "node --expose-internals ./node_modules/.bin/mocha $(find test -name '*spec.js') --exit --recursive"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --expose-internals ./node_modules/.bin/mocha $(find test -name '*spec.js') --exit --recursive"
   },
   "author": "Jaap van der Kreeft",
   "license": "MIT",

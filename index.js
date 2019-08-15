@@ -67,34 +67,41 @@ class ErrorFieldNotFound extends Error {
   }
 }
 
+/**
+ * convert the def to the index in the array
+ * @param fieldName String A or AA or AAA
+ * @return Number 0 based entry
+ *
+ * @private
+ */
+charToIndex = function(fieldName) {
+  fieldName = fieldName.toUpperCase();
+  let result = 0;
+
+  for (let l = 0; l < fieldName.length ; l++) {
+    let x = fieldName.charCodeAt(l) - 'A'.charCodeAt(0) + 1;  // 1 .. 26
+    result = (result * 26) + x;
+  }
+  return result - 1; // 0 based
+};
+
+
 class RowToObject {
   constructor(definition = {}) {
     this._firstRow = definition.firstRow ? definition.firstRow : 'index';
-    if (['fieldName', 'index', 'letters'].indexOf(this._firstRow) < 0) { throw new Error('firstRow can only be fieldName, index or letters')}
+    if (['fieldName', 'index', 'letter'].indexOf(this._firstRow) < 0) { throw new Error('firstRow can only be fieldName, index or letters')}
     this._fields = definition.fields;
     this._compiled = false;
   }
 
-  /**
-   * convert the def to the index in the array
-   * @param row the row to scan
-   * @param def the number/string to find ex: 1, '1', 'A', 'Ab'
-   * @private
-   */
-  _toIndex(row, def) {
-    let index = _.toNumber(def);
-    if (index = NaN) {
-
-    }
-  }
   _fieldNameToIndex(fieldName, row) {
     let index;
     if (this._firstRow === 'fieldName') {
       index = row.indexOf(fieldName);
-    } else if (this._firstRow === 'letters') {
-      index = this._toIndex(row, field)
+    } else if (this._firstRow === 'letter') {
+      index = charToIndex(fieldName)
     } else {
-      index = _.toNumber(fieldName);
+      index = _.toNumber(fieldName) - 1 ;
     }
     if (index < 0 || index >= row.length ){
       throw new ErrorFieldNotFound(fieldName);
@@ -170,6 +177,7 @@ class RowToObject {
         }
       } else if (_.isArray(field)) {
         for (let i = 0 ; i < field.length; i++) {
+          // should set the _forceArray flag
           this._compiled.push(this._compileObject(fieldName, field[i], row))
         }
       } else if (_.isObject(field)) {  // carefull: Array is also an Object!
@@ -219,7 +227,7 @@ class RowToObject {
   convert(row) {
     if (this._compiled === false) {
       if (this._compileRow(row)) {
-        return {}
+        return false
       }
     }
     let result = {};
@@ -230,6 +238,7 @@ class RowToObject {
       }
       let data = this._fieldToValue(field, row);
       if (data !== undefined) {
+        // check for field.forceArray to make it an array
         if (_.isArray(result[field.fieldName])) {
           result[field.fieldName].push(data);
         } else {
@@ -243,5 +252,6 @@ class RowToObject {
 
 module.exports = {
   RowToObject,
-  ErrorFieldNotFound
+  ErrorFieldNotFound,
+  charToIndex
 };

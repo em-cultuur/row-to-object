@@ -45,6 +45,13 @@ describe('row-to-object',  () => {
     }
   };
 
+  it('charToIndex', () => {
+    assert(R2O.charToIndex('B') === 1, 'B');
+    assert(R2O.charToIndex('Z') === 25, 'Z');
+    assert(R2O.charToIndex('aa') === 26, 'aa');
+    assert(R2O.charToIndex('ac') === 28, 'ac');
+
+  });
   it('field: value', () => {
     let r = new R2O.RowToObject({ firstRow: 'fieldName', fields: {
         id: "=ThisOne"
@@ -144,7 +151,7 @@ describe('row-to-object',  () => {
     assert(obj.location[0]._index === '0', 'got index');
     assert(obj.location[0].city === 'Amsterdam', 'got fixed value');
     assert(obj.location[1].city === 'Rotterdam', 'got fixed value');
-  })
+  });
 
   it("field: complex - two element array - required", () => {
     let r = new R2O.RowToObject({ firstRow: 'fieldName', fields: {
@@ -165,6 +172,23 @@ describe('row-to-object',  () => {
     r.convert(['id', 'IdentificatieMedewerker', "WerkadresStraat", "WerkadresHuisnummer", "WerkadresPostcode", "WoonadresStraat"]);
     let obj = r.convert(['1234', '9876', '', '1234', '2017GG', 'no more street']);
     assert(obj.location.city === 'Rotterdam', 'got fixed value');
-  })
+  });
 
+
+  it("column indexes: complex - two element array", () => {
+    let r = new R2O.RowToObject({ firstRow: 'index', fields: {
+        id: "2"
+      }});
+    r.convert(['id', 'IdentificatieMedewerker']);
+    let obj = r.convert(['1234', '9876']);
+    assert(obj.id === '9876', 'got the number')
+  });
+
+  it("column indexes: complex - two element array", () => {
+    let r = new R2O.RowToObject({ firstRow: 'letter', fields: {
+        id: "B"
+      }});
+    let obj = r.convert(['1234', '9876']);
+    assert(obj.id === '9876', 'got the number')
+  });
 });
