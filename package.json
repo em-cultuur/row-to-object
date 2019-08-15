@@ -1,11 +1,8 @@
 {
   "name": "row-to-object",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Convert a row (csv, excel) to a structured object",
   "main": "index.js",
-  "directories": {
-    "test": "node --expose-internals ./node_modules/.bin/mocha $(find test -name '*spec.js') --exit --recursive"
-  },
   "scripts": {
     "test": "node --expose-internals ./node_modules/.bin/mocha $(find test -name '*spec.js') --exit --recursive"
   },
