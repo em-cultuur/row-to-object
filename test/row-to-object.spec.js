@@ -122,7 +122,7 @@ describe('row-to-object',  () => {
   it("field: complex - one element index", () => {
     let r = new R2O.RowToObject({ firstRow: 'fieldName', fields: {
         location: {
-          "_index" : "0",
+          "_index" : "=0",
           "street": "WerkadresStraat",
           "city": "=Amsterdam"
 
@@ -139,12 +139,12 @@ describe('row-to-object',  () => {
     let r = new R2O.RowToObject({ firstRow: 'fieldName', fields: {
         location: [
           {
-            "_index" : "0",
+            "_index" : "=0",
             "street": "WerkadresStraat",
             "city": "=Amsterdam"
           },
           {
-            "_index" : "1",
+            "_index" : "=1",
             "street": "WoonadresStraat",
             "city": "=Rotterdam"
           }
@@ -164,13 +164,13 @@ describe('row-to-object',  () => {
     let r = new R2O.RowToObject({ firstRow: 'fieldName', fields: {
         location: [
           {
-            "_index" : "0",
+            "_index" : "=0",
             "street": { _value: "WerkadresStraat", _required: true},
             "city": "=Amsterdam",
 
           },
           {
-            "_index" : "1",
+            "_index" : "=1",
             "street": "WoonadresStraat",
             "city": "=Rotterdam"
           }

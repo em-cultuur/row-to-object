@@ -131,23 +131,19 @@ class RowToObject {
     let result = { fieldName: fieldName, fields: []};
     for (let subFieldName in field) {
       if (!field.hasOwnProperty(subFieldName)) { continue }
-      if (subFieldName === '_index') {
-        result._index = field._index;
+      let subField = field[subFieldName];
+      if (!_.isString(subField)) {
+         result.fields.push(this._compileObject(subFieldName, subField, row))
       } else {
-        let subField = field[subFieldName];
-        if (!_.isString(subField)) {
-           result.fields.push(this._compileObject(subFieldName, subField, row))
+        if (subField.substr(0, 1) === '=') {
+          result.fields.push({fieldName: subFieldName, value: subField.substr(1)});
         } else {
-          if (subField.substr(0, 1) === '=') {
-            result.fields.push({fieldName: subFieldName, value: subField.substr(1)});
-          } else {
-            let index = this._fieldNameToIndex(subField, row);
-            result.fields.push({
-              fieldName: subFieldName,
-              index: index,
-              required: this._isRequired(field._required, subField)
-            });
-          }
+          let index = this._fieldNameToIndex(subField, row);
+          result.fields.push({
+            fieldName: subFieldName,
+            index: index,
+            required: this._isRequired(field._required, subField)
+          });
         }
       }
     }
@@ -216,9 +212,6 @@ class RowToObject {
           return undefined
         }
         obj[objDef.fieldName] = r;
-      }
-      if (field._index) {
-        obj._index = field._index;
       }
       return obj;
     }
