@@ -52,6 +52,13 @@ describe('row-to-object',  () => {
     assert(R2O.charToIndex('ac') === 28, 'ac');
 
   });
+
+  it('field: idField', () => {
+    let r = new R2O.RowToObject({ firstRow: 'fieldName',  idField: 'testId', fields: {
+        id: "=ThisOne" , testId: '=10',
+      }});
+    assert(r.idField === 'testId', 'has Id field')
+  });
   it('field: value', () => {
     let r = new R2O.RowToObject({ firstRow: 'fieldName', fields: {
         id: "=ThisOne"

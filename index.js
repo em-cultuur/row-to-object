@@ -92,8 +92,12 @@ class RowToObject {
     if (['fieldName', 'index', 'letter'].indexOf(this._firstRow) < 0) { throw new Error('firstRow can only be fieldName, index or letters')}
     this._fields = definition.fields;
     this._compiled = false;
+    this._idField = definition.idField ? definition.idField : 'id';
   }
 
+  get idField() {
+    return this._idField;
+  }
   _fieldNameToIndex(fieldName, row) {
     let index;
     if (this._firstRow === 'fieldName') {
