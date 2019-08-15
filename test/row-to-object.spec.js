@@ -171,7 +171,8 @@ describe('row-to-object',  () => {
       }});
     r.convert(['id', 'IdentificatieMedewerker', "WerkadresStraat", "WerkadresHuisnummer", "WerkadresPostcode", "WoonadresStraat"]);
     let obj = r.convert(['1234', '9876', '', '1234', '2017GG', 'no more street']);
-    assert(obj.location.city === 'Rotterdam', 'got fixed value');
+    assert(obj.location.length === 1, 'got array');
+    assert(obj.location[0].city === 'Rotterdam', 'got fixed value');
   });
 
 

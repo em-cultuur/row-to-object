@@ -177,8 +177,10 @@ class RowToObject {
         }
       } else if (_.isArray(field)) {
         for (let i = 0 ; i < field.length; i++) {
-          // should set the _forceArray flag
-          this._compiled.push(this._compileObject(fieldName, field[i], row))
+          // should set the forceArray flag
+          let data = this._compileObject(fieldName, field[i], row);
+          data.forceArray = true;
+          this._compiled.push(data)
         }
       } else if (_.isObject(field)) {  // carefull: Array is also an Object!
         this._compiled.push(this._compileObject(fieldName, field, row))
@@ -239,6 +241,9 @@ class RowToObject {
       let data = this._fieldToValue(field, row);
       if (data !== undefined) {
         // check for field.forceArray to make it an array
+        if (field.forceArray && result[field.fieldName] === undefined) {
+          result[field.fieldName] = []
+        }
         if (_.isArray(result[field.fieldName])) {
           result[field.fieldName].push(data);
         } else {
