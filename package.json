@@ -9,6 +9,7 @@
   "author": "Jaap van der Kreeft",
   "license": "MIT",
   "dependencies": {
+    "jexl": "^2.1.1",
     "lodash": "^4.17.15"
   },
   "devDependencies": {

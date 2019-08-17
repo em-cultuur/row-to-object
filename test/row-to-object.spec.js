@@ -3,7 +3,8 @@
  */
 const Chai = require('chai');
 const assert = Chai.assert;
-const R2O = require('../index');
+const R2O = require('../row-to-object-1');
+const Jexl = require('jexl');
 
 describe('row-to-object',  () => {
 
@@ -52,6 +53,20 @@ describe('row-to-object',  () => {
     assert(R2O.charToIndex('ac') === 28, 'ac');
 
   });
+
+  // // https://stackoverflow.com/questions/2357618/is-there-such-a-thing-as-a-catch-all-key-for-a-javascript-object
+  // let test = new Object();
+  // let fields = new Proxy(test,  {
+  //   get(target, name) {
+  //     return 'jaap'
+  //   }
+  // });
+  //
+  // it('jexl', () => {
+  //   return Jexl.eval('name == "jaap"',  fields /* {name: 'piet'} */).then( (r) => {
+  //     console.log(r);
+  //   })
+  // });
 
   it('field: idField', () => {
     let r = new R2O.RowToObject({ firstRow: 'fieldName',  idField: 'testId', fields: {
