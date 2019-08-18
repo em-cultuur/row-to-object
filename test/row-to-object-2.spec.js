@@ -264,7 +264,7 @@ describe('row-to-object 2',  () => {
   describe('setup', () => {
     it('emptyCheck', () => {
       let conv = new RtoO.RowToObject({
-        firstRow: 'fieldName', emptyCheck: 'length',
+        firstRow: 'fieldName', emptyCheck: 'length', idField: 'testId',
         fields: {
           id: "SomeField",
           noField: "OtherField"
@@ -274,6 +274,7 @@ describe('row-to-object 2',  () => {
       r = conv.convert(['some', '12345', '']);
       assert(r.id = '12345 -some', 'did add');
       assert(r.noField === undefined, 'left empty')
+      assert(conv.idField === 'testId', 'read idField')
     });
   });
 

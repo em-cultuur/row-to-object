@@ -77,7 +77,7 @@ class RowToObject2  {
     this._firstRow = definition.firstRow ? definition.firstRow : 'index';
     if (['fieldName', 'index', 'letter'].indexOf(this._firstRow) < 0) { throw new Error('firstRow can only be fieldName, index or letter')}
     this._fields = definition.fields;
-    this._fieldNames = false;
+//    this._fieldNames = false;
     this._spaceHandler = definition.spaceHandler ? definition.spaceHandler : 'remove';
     if (['remove', '_'].indexOf(this._spaceHandler) === -1) { throw new Error(`invalid spaceHandler. allowed are remove or _`)}
     this._idField = definition.idField ? definition.idField : 'id';
@@ -86,6 +86,9 @@ class RowToObject2  {
     if (['length', 'undefined'].indexOf(this._emptyCheck) === -1) { throw new Error(`invalid emptyCheck. allowed are space or length`)}
   }
 
+  get idField() {
+    return this._idField;
+  }
   _toColumnName(num) {
     for (var ret = '', a = 1, b = 26; (num -= a) >= 0; a = b, b *= 26) {
       ret = String.fromCharCode(parseInt((num % b) / a) + 65) + ret;
