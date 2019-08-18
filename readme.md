@@ -21,8 +21,10 @@ let converter = new Conv({ type: 'fieldName', fields: {
     city: 'City'
   },
   email: [
-    { type: '=work', value: 'WorkEmail'},
-    { type: '=newsletter', value: 'Newsletter', _required: true}
+    { type: "'work'", value: 'WorkEmail'},
+    { type: "Newsletter | length > 0 ? 'newsletter' : undefined", 
+      value: "Newsletter | length > 0 ? Newsletter : undefined"
+    }
   ]
 }})
 

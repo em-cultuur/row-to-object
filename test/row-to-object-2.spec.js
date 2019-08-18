@@ -5,7 +5,6 @@ const RtoO = require('../row-to-object-2');
 
 describe('row-to-object 2',  () => {
   describe('fixed values', () => {
-
     it('read value', () => {
       let conv = new RtoO.RowToObject({ firstRow: 'fieldName',  idField: 'testId',
         fields: {
@@ -63,18 +62,65 @@ describe('row-to-object 2',  () => {
       });
       let r = conv.convert(['SomeField', 'CustomerId']);
       r = conv.convert(['some', '12345']);
-      assert(r.id = '12345 - some', 'did calculate')
+      assert(r.id === '12345 - some', 'did calculate')
     });
-    it('trim', () => {
+    it('fieldname spaces: remove', () => {
       let conv = new RtoO.RowToObject({ firstRow: 'fieldName',  idField: 'testId',
         fields: {
-          id: "(CustomerId + ' - ') | trim + SomeField",
+          id: "CustomerId + ' - ' + SomeField",
         }
       });
-      let r = conv.convert(['SomeField', 'CustomerId']);
+      let r = conv.convert(['SomeField', 'Customer Id']);
       r = conv.convert(['some', '12345']);
-      assert(r.id = '12345 -some', 'did calculate')
+      assert(r.id === '12345 - some', 'did calculate')
     });
+    it('fieldname spaces: _ ', () => {
+      let conv = new RtoO.RowToObject({ firstRow: 'fieldName', spaceHandler: '_',
+        fields: {
+          id: "Customer_Id + ' - ' + SomeField",
+        }
+      });
+      let r = conv.convert(['SomeField', 'Customer Id']);
+      r = conv.convert(['some', '12345']);
+      assert(r.id === '12345 - some', 'did calculate')
+    });
+
+    it('column[] value', () => {
+      let conv = new RtoO.RowToObject({ firstRow: 'fieldName', spaceHandler: '_',
+        fields: {
+          id: "column[1]",
+        }
+      });
+      let r = conv.convert(['SomeField', 'Customer Id']);
+      r = conv.convert(['some', '12345']);
+      assert(r.id === '12345', 'did calculate')
+    });
+
+    it('letters column', () => {
+      let conv = new RtoO.RowToObject({ firstRow: 'letter',
+        fields: {
+          id: "B",
+        }
+      });
+      //let r = conv.convert(['SomeField', 'Customer Id']);
+      let r = conv.convert(['some', '12345']);
+      assert(r.id === '12345', 'did calculate')
+    });
+
+
+    it('compare case insensitve', () => {
+      let conv = new RtoO.RowToObject({ firstRow: 'fieldName', spaceHandler: '_',
+        fields: {
+          id: "'Some' |=| SomeField ? 1: 0",
+          not: "'Some' == SomeField ? 1: 0",
+        }
+      });
+      let r = conv.convert(['SomeField', 'Customer Id']);
+      r = conv.convert(['some', '12345']);
+      assert(r.id = '1', 'did calculate')
+      assert(r.not = '0', 'did calculate')
+    });
+
   });
   describe('object', () => {
     it('create an object', () => {
@@ -127,6 +173,22 @@ describe('row-to-object 2',  () => {
       assert(r.location === undefined, 'not created any object');
       r = conv.convert(['12345', 'mainstreet', 'Haarlem']);
       assert(r.location.city ===  'Haarlem', 'created field');
+    });
+
+    it ('remove empty - length', () => {
+      let conv = new RtoO.RowToObject({
+        firstRow: 'fieldName', emptyCheck: 'length',
+        fields: {
+          location: {
+            street: "StreetName",
+            city: "City",
+            countryCode: "City|length > 0 ? 'NL' : ''"
+          }
+        }
+      });
+      let r = conv.convert(['CustomerId', 'StreetName', 'City']);
+      r = conv.convert(['12345', '', '']);
+      assert(r.location === undefined, 'created field');
     })
   });
 
@@ -164,4 +226,44 @@ describe('row-to-object 2',  () => {
 
   });
 
+  describe('function', () => {
+    it('trim', () => {
+      let conv = new RtoO.RowToObject({ firstRow: 'fieldName',  idField: 'testId',
+        fields: {
+          id: "(CustomerId + ' - ') | trim + SomeField",
+        }
+      });
+      let r = conv.convert(['SomeField', 'CustomerId']);
+      r = conv.convert(['some', '12345']);
+      assert(r.id = '12345 -some', 'did calculate')
+    });
+
+    it('length', () => {
+      let conv = new RtoO.RowToObject({ firstRow: 'fieldName',  idField: 'testId',
+        fields: {
+          text : "CustomerId + ' is ' + CustomerId | length",
+        }
+      });
+      let r = conv.convert(['SomeField', 'CustomerId']);
+      r = conv.convert(['some', '12345']);
+      assert(r.text === '12345 is 5', 'did calculate')
+    });
   });
+
+  describe('setup', () => {
+    it('emptyCheck', () => {
+      let conv = new RtoO.RowToObject({
+        firstRow: 'fieldName', emptyCheck: 'length',
+        fields: {
+          id: "SomeField",
+          noField: "OtherField"
+        }
+      });
+      let r = conv.convert(['SomeField', 'CustomerId', "OtherField"]);
+      r = conv.convert(['some', '12345', '']);
+      assert(r.id = '12345 -some', 'did add');
+      assert(r.noField === undefined, 'left empty')
+    });
+  });
+
+});
