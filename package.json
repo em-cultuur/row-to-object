@@ -1,6 +1,6 @@
 {
   "name": "row-to-object",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Convert a row (from csv, excel) to a structured object",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   "author": "Jaap van der Kreeft",
   "license": "MIT",
   "dependencies": {
-    "jexl": "^2.1.1",
+    "jexl": "github:toxus/Jexl",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
