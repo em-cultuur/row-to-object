@@ -124,7 +124,14 @@ class RowToObject2  {
 
   _checkEmpty(value) {
     switch (this._emptyCheck) {
-      case 'length' : return (value && typeof value === 'string' && value.length > 0) ? value : undefined;
+      case 'length' :
+        if (value && typeof value === 'string' && value.length > 0) {
+          return value;
+        } else if (value) { // number
+          return value;
+        } else {
+          return  undefined;
+        }
       case 'undefined': return value;
       default:
         throw new Error(`unknown ${this._emptyCheck}`)
@@ -132,7 +139,7 @@ class RowToObject2  {
   }
 
   _fieldValue(field) {
-    if (typeof field === 'string') {
+    if (typeof field === 'string' || typeof field === 'number') {
       return this._checkEmpty(Jexl.evalSync(field, this._lookup));
     } else if (Array.isArray(field)) {
       let result = [];

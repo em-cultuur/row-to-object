@@ -40,6 +40,17 @@ describe('row-to-object 2',  () => {
       r = conv.convert(['some', '12345']);
       assert(r.id === '12345', 'did read the id')
     });
+    it('read numeric value', () => {
+      let conv = new RtoO.RowToObject({ firstRow: 'fieldName',  idField: 'testId',
+        fields: {
+          id: "CustomerId",
+        }
+      });
+      let r = conv.convert(['SomeField', 'CustomerId'])
+      r = conv.convert(['some', 12345]);
+      assert(r.id === 12345, 'did read the id')
+    });
+
     it('field not found', () => {
       let conv = new RtoO.RowToObject({ firstRow: 'fieldName',  idField: 'testId',
         fields: {
