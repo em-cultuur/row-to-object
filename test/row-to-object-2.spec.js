@@ -63,8 +63,43 @@ describe('row-to-object 2',  () => {
         assert(false, 'should throw an error')
       } catch (e) {
         assert(e.type === 'ErrorFieldNotFound', 'Throw error');
+        assert(e.fieldName === 'id.CustomerXXXX', 'the right field')
       }
     });
+    it('field not found - array', () => {
+      let conv = new RtoO.RowToObject({ firstRow: 'fieldName',  idField: 'testId',
+        fields: {
+          id: ["CustomerXXXX"],
+        }
+      });
+      let r = conv.convert(['SomeField', 'CustomerId']);
+      try {
+        r = conv.convert(['some', '12345']);
+        assert(false, 'should throw an error')
+      } catch (e) {
+        assert(e.type === 'ErrorFieldNotFound', 'Throw error');
+        assert(e.fieldName === 'id[0].CustomerXXXX', 'the right field')
+      }
+    });
+
+    it('field not found - object', () => {
+      let conv = new RtoO.RowToObject({ firstRow: 'fieldName',  idField: 'testId',
+        fields: {
+          id: {
+            name: "CustomerXXXX"
+          },
+        }
+      });
+      let r = conv.convert(['SomeField', 'CustomerId']);
+      try {
+        r = conv.convert(['some', '12345']);
+        assert(false, 'should throw an error')
+      } catch (e) {
+        assert(e.type === 'ErrorFieldNotFound', 'Throw error');
+        assert(e.fieldName === 'id.name.CustomerXXXX', 'the right field')
+      }
+    });
+
     it('combine fields', () => {
       let conv = new RtoO.RowToObject({ firstRow: 'fieldName',  idField: 'testId',
         fields: {

@@ -41,7 +41,7 @@ class ErrorFieldNotFound extends Error {
     super(message ? message : `field ${field}`);
     // can not use this.constructor.name:   it returns 'unexpected string'
     this.type = 'ErrorFieldNotFound';
-    this.fieldname = field
+    this.fieldName = field
   }
 }
 
@@ -141,28 +141,50 @@ class RowToObject2  {
     }
   }
 
-  _fieldValue(field) {
+  _fieldValue(field, fieldName) {
     if (typeof field === 'string' || typeof field === 'number') {
-      return this._checkEmpty(Jexl.evalSync(field, this._lookup));
+      try {
+        return this._checkEmpty(Jexl.evalSync(field, this._lookup));
+      } catch(e) {
+        if (e.type === 'ErrorFieldNotFound') {
+          e.fieldName = fieldName + '.' +  e.fieldName;
+        }
+        throw e;
+      }
     } else if (Array.isArray(field)) {
       let result = [];
       for (let l = 0; l < field.length; l++) {
-        let value = this._fieldValue(field[l]);
-        if (value !== undefined) {
-          result.push(value);
+        try {
+          let value = this._fieldValue(field[l], `[${l}]`);
+          if (value !== undefined) {
+            result.push(value);
+          }
+        } catch( e) {
+          if (e.type === 'ErrorFieldNotFound') {
+            e.fieldName = `${fieldName}${e.fieldName}`;
+          }
+          throw e;
         }
       }
       return result.length ? result : undefined;
     } else { // it's an object
       let result = {};
-      for (let fieldName in field) {
-        if (!field.hasOwnProperty(fieldName)) { continue };
-        let value = this._fieldValue(field[fieldName]);
-        if (value !== undefined) {
-          result[fieldName] = value;
-        }
+      for (let propName in field) {
+        try {
+          if (!field.hasOwnProperty(propName)) {
+            continue
+          }
+          let value = this._fieldValue(field[propName], propName);
+          if (value !== undefined) {
+            result[propName] = value;
+          }
+        } catch( e) {
+            if (e.type === 'ErrorFieldNotFound') {
+              e.fieldName = `${fieldName}.${e.fieldName}`;
+            }
+            throw e;
+          }
       }
-      // if no values the object is not stored
       return Object.keys(result).length === 0 ? undefined : result;
     }
   }
@@ -182,7 +204,7 @@ class RowToObject2  {
 //    lookupErr = false;
     for (let fieldName in this._fields) {
       if (!this._fields.hasOwnProperty(fieldName)) { continue };
-      let value = this._fieldValue(this._fields[fieldName]);
+      let value = this._fieldValue(this._fields[fieldName], fieldName);
       if (value !== undefined) {
         result[fieldName] = value;
       }
