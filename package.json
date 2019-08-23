@@ -9,8 +9,10 @@
   "author": "Jaap van der Kreeft",
   "license": "MIT",
   "dependencies": {
+    "@hapi/joi": "^15.1.1",
     "jexl": "github:toxus/Jexl",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "parse-full-name": "github:toxus/parse-full-name"
   },
   "devDependencies": {
     "mocha": "^6.2.0",
