@@ -9,9 +9,11 @@ const Field = require('../object-mapper/field').Field;
 const FieldText = require('../object-mapper/field-text').FieldText;
 const FieldBoolean = require('../object-mapper/field-boolean').FieldBoolean;
 const FieldEmail = require('../object-mapper/field-email').FieldEmail;
+const FieldTelephone = require('../object-mapper/field-telephone').FieldTelephone;
 const FieldZipcode = require('../object-mapper/field-zipcode').FieldZipcode;
 const Countries = require('../lib/lookup').Countries;
 const FieldObject = require('../object-mapper/field-object').FieldObject;
+const FieldArray = require('../object-mapper/field-array').FieldArray;
 const FieldComposed = require('../object-mapper/field-composed').FieldComposed;
 const FieldLocation = require('../object-mapper/field-location').FieldLocation;
 const FieldContact = require('../object-mapper/field-contact').FieldContact;
@@ -90,6 +92,19 @@ describe('field',  () => {
     })
   });
 
+  describe('telephone', () => {
+    logger.clear();
+    it('convert', async () => {
+      let f = new FieldTelephone();
+      assert(f.validate('tel', '', logger) === true, 'none is valid');
+      assert(f.validate('tel', undefined, logger) === true, 'undefined is valid');
+      let t = await f.convert('tel', '+31 612345678', logger);
+      assert(t === '06-12345678', 'did accept');
+      t = await f.convert('tel', '+32-612345678', logger);
+      assert(t === '+32 612345678', 'did accept');
+    })
+  });
+
   describe('zipcode', () => {
     let f = new FieldZipcode();
     logger.clear();
@@ -114,6 +129,8 @@ describe('field',  () => {
     it('empty', () => {
       assert(f.validate('name', {}, logger) === true, 'empty is valid');
       assert(f.validate('name', undefined, logger) === true, 'undefined is valid');
+      assert(f.isEmpty({}), 'no fields is empty');
+      // assert(f.isEmpty({test: ''}), 'no fields is empty');
     });
     f = new FieldObject({fields: {name: new FieldText(), other: new FieldText()}});
     it('one field', () => {
@@ -128,15 +145,38 @@ describe('field',  () => {
       f = new FieldObject({fields: {bool: new FieldBoolean(), email: new FieldEmail()}});
       let r = await f.convert('obj', {bool: 0, email:'INFO@test.com'}, logger);
       assert(typeof r.bool === 'boolean', 'changed');
-      //assert(r._index === '123', 'left the others');
+      assert(f.isEmpty({bool: undefined}), 'is empty');
     });
     it('remove empty allowed fields',async () => {
       f = new FieldObject({fields: {bool: new FieldBoolean(), email: new FieldEmail(), _source: new FieldText({emptyAllow: true})}});
       let r = await f.convert('obj', {bool: undefined, _source : '1234'}, logger);
       assert(_.isEmpty(r), '_source is flexible');
     })
-
   });
+
+  describe('array', () => {
+    let f = new FieldArray();
+    it('empty', () => {
+      assert(f.validate('array', [], logger) === true, 'empty is valid');
+      logger.clear();
+      f.validate('array', {}, logger);
+      assert(logger.hasErrors(), 'wrong type');
+      assert(f.isEmpty([]), 'no elements is empty');
+      assert(f.isEmpty(['a'] === false), 'an elements is not empty');
+      assert(f.isEmpty(['', '']), 'empty string is empty')
+    });
+    it('fields', () => {
+      assert(f.validate('array', ['test', 'test2'], logger) === true, 'is valid');
+    });
+    it('convert', async () => {
+      logger.clear();
+      let r = await f.convert('array', ['test', '', 'nr 3'], logger);
+      assert(r.length === 2, 'removed one');
+    });
+    let f2 = new FieldArray({type: new FieldEmail()});
+    assert(f2.validate('array.email', ['not@example.com'], logger), 'is valid')
+  });
+
 
   describe('composed', () => {
     let f = new FieldComposed();
@@ -207,13 +247,19 @@ describe('field',  () => {
   describe('contact',  () => {
     let f = new FieldContact();
     logger.clear();
-    it('empty', async () => {
+    it('fullname', async () => {
       let r = await f.convert('contact', {fullName: 'Jan de Hond'}, logger);
-      assert(r.firstName === 'Jan' && r.lastName === 'Hond' && r.namePrefix === 'de' , 'got all')
+      assert(r.firstName === 'Jan' && r.lastName === 'Hond' && r.namePrefix === 'de' , 'got all');
       r = await f.convert('contact', {fullName: 'dr. J. de Hond'}, logger);
-      assert(r.title === 'dr.' && r.firstName === undefined && r.firstLetters === 'J.' && r.lastName === 'Hond' && r.namePrefix === 'de' , 'got all')
+      assert(r.title === 'dr.' && r.firstName === undefined && r.firstLetters === 'J.' && r.lastName === 'Hond' && r.namePrefix === 'de' , 'got all');
       r = await f.convert('contact', {fullName: 'Jan Willem de Boer'}, logger);
-      assert(r.firstLetters = 'J.W.' && r.firstName === 'Jan' && r.middleName === 'Willem' && r.lastName === 'Boer' && r.namePrefix === 'de' , 'got all')
+      assert(r.firstLetters = 'J.W.' && r.firstName === 'Jan' && r.middleName === 'Willem' && r.lastName === 'Boer' && r.namePrefix === 'de' , 'got all');
+      r = await f.convert('contact', {fullName: 'Jack (mojo) Man'}, logger);
+      assert(r.firstName === 'Jack' && r.lastName === 'Man' && r.firstLetters === 'J.' && r.nickName === 'mojo' , 'got all');
+      r = await f.convert('contact', {fullName: 'sergeant majoor Bert de Vries'}, logger);
+      assert(r.firstName === 'Bert' && r.lastName === 'Vries' && r.firstLetters === 'B.' && r.title === 'sergeant majoor' , 'got all')
+      r = await f.convert('contact', {fullName: 'Abt Jan'}, logger);
+      assert(r.lastName === 'Jan' && r.title === 'Abt' , 'got all')
 
     });
 

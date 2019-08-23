@@ -1,0 +1,130 @@
+[{ 
+
+    "_id" : ObjectId("5d0361df81c07633cd22711a"), 
+    "prefix" : "d'"
+}
+{ 
+    "_id" : ObjectId("5d0361e481c07633cd22711b"), 
+    "prefix" : "de"
+}
+{ 
+    "_id" : ObjectId("5d0361e781c07633cd22711c"), 
+    "prefix" : "de la"
+}
+{ 
+    "_id" : ObjectId("5d0361ec81c07633cd22711d"), 
+    "prefix" : "de van der"
+}
+{ 
+    "_id" : ObjectId("5d0361f081c07633cd22711e"), 
+    "prefix" : "den"
+}
+{ 
+    "_id" : ObjectId("5d0361f381c07633cd22711f"), 
+    "prefix" : "Di"
+}
+{ 
+    "_id" : ObjectId("5d0361f981c07633cd227120"), 
+    "prefix" : "du"
+}
+{ 
+    "_id" : ObjectId("5d0361fd81c07633cd227121"), 
+    "prefix" : "in den"
+}
+{ 
+    "_id" : ObjectId("5d03620381c07633cd227122"), 
+    "prefix" : "In der"
+}
+{ 
+    "_id" : ObjectId("5d03620881c07633cd227123"), 
+    "prefix" : "in 't"
+}
+{ 
+    "_id" : ObjectId("5d03620d81c07633cd227124"), 
+    "prefix" : "la"
+}
+{ 
+    "_id" : ObjectId("5d03620f81c07633cd227125"), 
+    "prefix" : "le"
+}
+{ 
+    "_id" : ObjectId("5d03621681c07633cd227126"), 
+    "prefix" : "op de"
+}
+{ 
+    "_id" : ObjectId("5d03621981c07633cd227127"), 
+    "prefix" : "op het"
+}
+{ 
+    "_id" : ObjectId("5d03621e81c07633cd227128"), 
+    "prefix" : "Op't"
+}
+{ 
+    "_id" : ObjectId("5d03622481c07633cd227129"), 
+    "prefix" : "'t"
+}
+{ 
+    "_id" : ObjectId("5d03622881c07633cd22712a"), 
+    "prefix" : "te"
+}
+{ 
+    "_id" : ObjectId("5d03622c81c07633cd22712b"), 
+    "prefix" : "ten"
+}
+{ 
+    "_id" : ObjectId("5d03622f81c07633cd22712c"), 
+    "prefix" : "ter"
+}
+{ 
+    "_id" : ObjectId("5d03623481c07633cd22712d"), 
+    "prefix" : "v.d."
+}
+{ 
+    "_id" : ObjectId("5d03623a81c07633cd22712e"), 
+    "prefix" : "v/d"
+}
+{ 
+    "_id" : ObjectId("5d03623e81c07633cd22712f"), 
+    "prefix" : "van"
+}
+{ 
+    "_id" : ObjectId("5d03624281c07633cd227130"), 
+    "prefix" : "van de"
+}
+{ 
+    "_id" : ObjectId("5d03624581c07633cd227131"), 
+    "prefix" : "van den"
+}
+{ 
+    "_id" : ObjectId("5d03624981c07633cd227132"), 
+    "prefix" : "van der"
+}
+{ 
+    "_id" : ObjectId("5d03624e81c07633cd227133"), 
+    "prefix" : "van 't"
+}
+{ 
+    "_id" : ObjectId("5d03625581c07633cd227134"), 
+    "prefix" : "Vande"
+}
+{ 
+    "_id" : ObjectId("5d03625881c07633cd227135"), 
+    "prefix" : "Vanden"
+}
+{ 
+    "_id" : ObjectId("5d03625b81c07633cd227136"), 
+    "prefix" : "Vander"
+}
+{ 
+    "_id" : ObjectId("5d03626481c07633cd227137"), 
+    "prefix" : "von"
+}
+{ 
+    "_id" : ObjectId("5d03626b81c07633cd227138"), 
+    "prefix" : "von der"
+}
+{ 
+    "_id" : ObjectId("5d03627181c07633cd227139"), 
+    "prefix" : "voor 't"
+}
+]

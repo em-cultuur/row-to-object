@@ -16,6 +16,10 @@ class FieldEmail extends FieldText {
 
   validate(fieldName, data, logger = false) {
     if (super.validate(fieldName, data, logger)) {
+      if (data && data.length) {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(data);
+      }
       return true;
     }
     return false;
@@ -47,10 +51,11 @@ class FieldEmail extends FieldText {
    */
   convert(fieldName, data, logger) {
     return this.adjust(fieldName, data, logger).then( (rec) => {
-      if (this.validate(fieldName, data, logger)) {
+      if (this.validate(fieldName, rec, logger)) {
         return Promise.resolve(rec)
       }
-      return Promise.reject(new ErrorNotValid(fieldName))
+      this.log(logger, 'error', fieldName, `${rec} is not a valid email`)
+      return Promise.resolve('' )
     })
   }
 }

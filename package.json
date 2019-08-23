@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "@hapi/joi": "^15.1.1",
+    "google-libphonenumber": "^3.2.3",
     "jexl": "github:toxus/Jexl",
     "lodash": "^4.17.15",
     "parse-full-name": "github:toxus/parse-full-name"

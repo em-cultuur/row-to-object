@@ -15,9 +15,7 @@ describe('object-mapper',  () => {
   });
 
   describe('validate', () => {
-    it('accept record', () => {
-      assert(objMap.validate('record',{fullName: 'jansen'}) === true, 'minimum field info');
-    })
+
   });
 
 });

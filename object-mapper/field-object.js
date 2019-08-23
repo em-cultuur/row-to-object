@@ -45,6 +45,16 @@ class FieldObject extends Field {
     return isValid;
   }
 
+  isEmpty(data) {
+    for (let key in this._fields) {
+      if (!this._fields.hasOwnProperty(key)) { continue}
+      if (!this._fields[key].isEmpty(data[key])) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   copyFieldsToResult(result, data, skip = []) {
     for (let key in data) {
       if (!data.hasOwnProperty(key)) { continue }
