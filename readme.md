@@ -59,7 +59,7 @@ field in the final object an entry is made. An example:
 
 ```js
 let config = {
-  city: "=Amsterdam",
+  city: "'Amsterdam'",
   fullName: "name",
   name: {_value: "someColumn", _required: true}
 }
@@ -88,7 +88,7 @@ A nested object can be created from the row. An example:
 let config = {
   location: {
    "street": "WerkadresStraat",
-   "city": "=Amsterdam",
+   "city": "'Amsterdam'",
   }
 }
 ````
