@@ -6,7 +6,7 @@ const FieldText = require('./field-text').FieldText;
 const FieldGuid = require('./field-text').FieldGuid;
 
 const FieldObject = require('./field-object').FieldObject;
-const FieldZipcode = require('./field-zipcode').FieldZipcode;
+const FieldZipcode = require('./field-text-zipcode').FieldTextZipcode;
 
 const Countries = require('../lib/lookup').Countries;
 const countryNumberRightId = require('../lib/lookup').countryNumberRightId;

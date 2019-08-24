@@ -2,61 +2,33 @@
  *
  */
 
-const FieldText = require('./field').Field;
-const _ = require('lodash');
-const ErrorNotValid = require('./field').ErrorNotValid;
+const FieldComposed = require('./field-composed').FieldComposed;
+const FieldTextEmail = require('./field-text-email').FieldTextEmail;
 
-
-class FieldEmail extends FieldText {
-
-  constructor(options = {}){
+class FieldEmail extends FieldComposed {
+  constructor(options = {}) {
     super(options);
-    this._name = 'email';
+    this._fields.email = new FieldTextEmail();
   }
 
-  validate(fieldName, data, logger = false) {
-    if (super.validate(fieldName, data, logger)) {
-      if (data && data.length) {
-        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(data);
-      }
-      return true;
-    }
-    return false;
-  }
-
-  adjust(fieldName, email, logger = false) {
-
-    if (email === undefined || email.length === 0) {
-      return undefined;
-    }
-    email = _.replace(email, /</g, '');
-    email = _.replace(email, />/g, '');
-    email = _.toLower(email);
-    email = email.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    email = _.replace(email, /\n/g, '');
-    email = _.replace(email, /\t/g, '');
-    email = _.replace(email, /\r/g, '');
-    email = _.replace(email, / /g, '');
-    return Promise.resolve(email)
-  }
 
   /**
-   * we must first clear the errors before validating
+   * just process all keys individual
    *
    * @param fieldName
-   * @param data
-   * @param logger
-   * @return {*}
+   * @param fields the field parsers
+   * @param data the data given
+   * @param logger Class where to store the errors
    */
-  convert(fieldName, data, logger) {
-    return this.adjust(fieldName, data, logger).then( (rec) => {
-      if (this.validate(fieldName, rec, logger)) {
-        return Promise.resolve(rec)
+  async processKeys(fieldName, fields, data, logger) {
+    let result = {};
+
+    if (fields.value === undefined) {  // value overrules all
+      if (fields.email) {
+        data.value = await this._fields.email.convert(fieldName, data.email, logger)
       }
-      this.log(logger, 'error', fieldName, `${rec} is not a valid email`)
-      return Promise.resolve('' )
-    })
+    }
+    return Promise.resolve(this.copyFieldsToResult(result, data, ['email']))
   }
 }
 

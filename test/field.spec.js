@@ -7,14 +7,16 @@ const _ = require('lodash');
 const Logger = require('../object-mapper/logger');
 const Field = require('../object-mapper/field').Field;
 const FieldText = require('../object-mapper/field-text').FieldText;
-const FieldBoolean = require('../object-mapper/field-boolean').FieldBoolean;
-const FieldEmail = require('../object-mapper/field-email').FieldEmail;
-const FieldTelephone = require('../object-mapper/field-telephone').FieldTelephone;
-const FieldZipcode = require('../object-mapper/field-zipcode').FieldZipcode;
+const FieldTextBoolean = require('../object-mapper/field-text-boolean').FieldTextBoolean;
+const FieldTextEmail = require('../object-mapper/field-text-email').FieldTextEmail;
+const FieldTextTelephone = require('../object-mapper/field-text-telephone').FieldTextTelephone;
+const FieldTextZipcode = require('../object-mapper/field-text-zipcode').FieldTextZipcode;
 const Countries = require('../lib/lookup').Countries;
 const FieldObject = require('../object-mapper/field-object').FieldObject;
 const FieldArray = require('../object-mapper/field-array').FieldArray;
 const FieldComposed = require('../object-mapper/field-composed').FieldComposed;
+const FieldTelephone = require('../object-mapper/field-telephone').FieldTelephone;
+const FieldEmail = require('../object-mapper/field-email').FieldEmail;
 const FieldLocation = require('../object-mapper/field-location').FieldLocation;
 const FieldContact = require('../object-mapper/field-contact').FieldContact;
 
@@ -39,6 +41,14 @@ describe('field',  () => {
   describe('text', () => {
     let f = new FieldText();
     logger.clear();
+    it('empty', () => {
+      assert(f.isEmpty('') === true, 'none');
+      assert(f.isEmpty(undefined) === true, 'none');
+      assert(f.isEmpty('   ') === true, 'spaces');
+      assert(f.isEmpty('a') === false, 'text');
+      assert(f.isEmpty(0) === false, 'number');
+    });
+
     it('validate', () => {
       assert(f.validate('name', 'value', logger) === true, 'string is valid');
       assert(!logger.hasMessages(), 'no messages');
@@ -57,7 +67,7 @@ describe('field',  () => {
   });
 
   describe('boolean', () => {
-    let f = new FieldBoolean();
+    let f = new FieldTextBoolean();
     logger.clear();
     it('validate', () => {
       assert(f.validate('bool', true, logger) === true, 'bool is valid');
@@ -78,7 +88,7 @@ describe('field',  () => {
   });
 
   describe('email', () => {
-    let f = new FieldEmail();
+    let f = new FieldTextEmail();
     logger.clear();
     it('validate', async () => {
       assert(f.validate('email', '', logger) === true, 'none is valid');
@@ -93,9 +103,14 @@ describe('field',  () => {
   });
 
   describe('telephone', () => {
+    let f = new FieldTextTelephone();
     logger.clear();
+    it('empty', () => {
+      assert(f.isEmpty('') === true, 'none');
+      assert(f.isEmpty(undefined) === true, 'none');
+      assert(f.isEmpty('0123456789') === false, 'number');
+    });
     it('convert', async () => {
-      let f = new FieldTelephone();
       assert(f.validate('tel', '', logger) === true, 'none is valid');
       assert(f.validate('tel', undefined, logger) === true, 'undefined is valid');
       let t = await f.convert('tel', '+31 612345678', logger);
@@ -106,7 +121,7 @@ describe('field',  () => {
   });
 
   describe('zipcode', () => {
-    let f = new FieldZipcode();
+    let f = new FieldTextZipcode();
     logger.clear();
     it('can change', async () => {
       assert(f.value('2011 BS') === '2011 BS', 'no changes on valid');
@@ -142,13 +157,13 @@ describe('field',  () => {
       logger.clear();
     });
     it('subprocess fields', async () => {
-      f = new FieldObject({fields: {bool: new FieldBoolean(), email: new FieldEmail()}});
+      f = new FieldObject({fields: {bool: new FieldTextBoolean(), email: new FieldTextEmail()}});
       let r = await f.convert('obj', {bool: 0, email:'INFO@test.com'}, logger);
       assert(typeof r.bool === 'boolean', 'changed');
       assert(f.isEmpty({bool: undefined}), 'is empty');
     });
     it('remove empty allowed fields',async () => {
-      f = new FieldObject({fields: {bool: new FieldBoolean(), email: new FieldEmail(), _source: new FieldText({emptyAllow: true})}});
+      f = new FieldObject({fields: {bool: new FieldTextBoolean(), email: new FieldTextEmail(), _source: new FieldText({emptyAllow: true})}});
       let r = await f.convert('obj', {bool: undefined, _source : '1234'}, logger);
       assert(_.isEmpty(r), '_source is flexible');
     })
@@ -173,7 +188,7 @@ describe('field',  () => {
       let r = await f.convert('array', ['test', '', 'nr 3'], logger);
       assert(r.length === 2, 'removed one');
     });
-    let f2 = new FieldArray({type: new FieldEmail()});
+    let f2 = new FieldArray({type: new FieldTextEmail()});
     assert(f2.validate('array.email', ['not@example.com'], logger), 'is valid')
   });
 
@@ -203,6 +218,38 @@ describe('field',  () => {
       let r = await f.convert('composed', {type: '', value:'some value', _source: '123'}, logger);
       assert(r.type === undefined, 'removed');
       assert(r._source === '123', 'left the others');
+    });
+  });
+
+  describe('telephone',  () => {
+    let f = new FieldTelephone();
+    logger.clear();
+    it('empty', async () => {
+      let r = await f.convert('telephone', {telephone: '', _source: 'master'}, logger);
+      assert(_.isEmpty(r), 'should clear a empty record')
+    });
+    it('select field', async () => {
+      let r = await f.convert('telephone', {telephone: '0123456789', _source: 'master'}, logger);
+      assert(r.value === '012-3456789', 'select tel en convert');
+      r = await f.convert('telephone', {telephone: '0123456789', telephoneInt: '0123456789', _source: 'master'}, logger);
+      assert(r.value === '+31 (12) 3456789', 'select tel international');
+      r = await f.convert('telephone', {value: '09876543210', telephone: '0123456789', telephoneInt: '0123456789', _source: 'master'}, logger);
+      assert(r.value === '09876543210', 'value is most favor');
+    });
+  });
+
+  describe('email',  () => {
+    let f = new FieldEmail();
+    logger.clear();
+    it('empty', async () => {
+      let r = await f.convert('email', {email: '', _source: 'master'}, logger);
+      assert(_.isEmpty(r), 'should clear a empty record')
+    });
+    it('select field', async () => {
+      let r = await f.convert('email', {email: 'INFO@test.com', _source: 'master'}, logger);
+      assert(r.value === 'info@test.com', 'select email en convert');
+      r = await f.convert('email', {email: 'INFO@test.com', value: 'test@test.com', _source: 'master'}, logger);
+      assert(r.value === 'test@test.com', 'select value not email');
     });
   });
 
@@ -257,7 +304,7 @@ describe('field',  () => {
       r = await f.convert('contact', {fullName: 'Jack (mojo) Man'}, logger);
       assert(r.firstName === 'Jack' && r.lastName === 'Man' && r.firstLetters === 'J.' && r.nickName === 'mojo' , 'got all');
       r = await f.convert('contact', {fullName: 'sergeant majoor Bert de Vries'}, logger);
-      assert(r.firstName === 'Bert' && r.lastName === 'Vries' && r.firstLetters === 'B.' && r.title === 'sergeant majoor' , 'got all')
+      assert(r.firstName === 'Bert' && r.lastName === 'Vries' && r.firstLetters === 'B.' && r.title === 'sergeant majoor' , 'got all');
       r = await f.convert('contact', {fullName: 'Abt Jan'}, logger);
       assert(r.lastName === 'Jan' && r.title === 'Abt' , 'got all')
 

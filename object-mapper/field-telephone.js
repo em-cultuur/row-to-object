@@ -2,111 +2,36 @@
  *
  */
 
-const FieldText = require('./field').Field;
-const _ = require('lodash');
-const ErrorNotValid = require('./field').ErrorNotValid;
+const FieldComposed = require('./field-composed').FieldComposed;
+const FieldTextTelephone = require('./field-text-telephone').FieldTextTelephone;
 
-
-class FieldTelephone extends FieldText {
-
-  constructor(options = {}){
+class FieldTelephone extends FieldComposed {
+  constructor(options = {}) {
     super(options);
-    this._name = 'telephone';
-    this._PNF = require('google-libphonenumber').PhoneNumberFormat;
-    this._phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
-    this._formatLocal = options.formatLocal ? options.formatLocal : '0NC-N';
-    this._format = options.formatLocal ? options.formatLocal : '+CC (NC) N';
-    this._country = options.country ? options.country.toUpperCase(): 'NL';
-    this._countryCode = options.countryCode ? options.countryCode : 31;
-
+    this._fields.telephone = new FieldTextTelephone();
+    this._fields.telephoneInt = new FieldTextTelephone({ countryCode :-1})     ; // force to international
   }
 
-  // validate(fieldName, data, logger = false) {
-  //   if (super.validate(fieldName, data, logger)) {
-  //     if (data && data.length) {
-  //       var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  //       return re.test(data);
-  //     }
-  //     return true;
-  //   }
-  //   return false;
-  // }
 
   /**
-   * Function to detect netCode and number from internationally formatted phone
-   * By Jelle
-   *
-   * @param phoneInt              internationally formatted phonenumber
-   * @param countryCode           country code ie 31 for NL
-   * @returns {Object}            returns splitted netCode and number
-   * @private
-   */
-   _checkNetCodeAndNumber(phoneInt, countryCode) {
-    const number = {
-      number: '',
-      netCode: ''
-    };
-
-    number.netCode = phoneInt.substring(phoneInt.indexOf(' ') + 1);
-    number.netCode = number.netCode.replace(/-/g, ' ');
-    if (number.netCode.indexOf(' ') !== -1 && number.netCode.substring(number.netCode.indexOf(' ') + 1).length >= 7) {
-      number.number = number.netCode.substring(number.netCode.indexOf(' ') + 1);
-      number.netCode = number.netCode.substring(0, number.netCode.indexOf(' '));
-    } else if (countryCode === 31 && number.netCode.indexOf(' ') === -1) {
-      number.number = number.netCode.substring(2);
-      number.netCode = number.netCode.substring(0, 2);
-    } else {
-      number.number = number.netCode;
-      number.netCode = '';
-    }
-    return number;
-  }
-
-  adjust(fieldName, telephone, logger = false) {
-
-    if (telephone === undefined || telephone.length === 0) {
-      return undefined;
-    }
-    let tel = this._phoneUtil.parse(telephone, this._country); // this._defaultCountryCode());
-    let format = this._format;
-    let countryCode = tel.getCountryCode(); 
-    if (countryCode === this._countryCode) {
-      format = this._formatLocal
-    }
-    
-    const phoneInt = this._phoneUtil.format(tel, this._PNF.INTERNATIONAL);
-    const number = this._checkNetCodeAndNumber(phoneInt, countryCode);
-
-    if (!number.netCode) {
-      format = format.replace('(NC)', '');
-      format = format.replace('NC-', '');
-      format = format.replace('NC', '');
-    }
-
-    format = format.replace('CC', countryCode);
-    format = format.replace('NC', number.netCode);
-    format = format.replace('NS', number.number);
-    format = format.replace('N', number.number.replace(/ /g,''));
-    format = format.replace(/  /g, ' ');
-    return Promise.resolve(format);
-  }
-
-  /**
-   * we must first clear the errors before validating
+   * just process all keys individual
    *
    * @param fieldName
-   * @param data
-   * @param logger
-   * @return {*}
+   * @param fields the field parsers
+   * @param data the data given
+   * @param logger Class where to store the errors
    */
-  convert(fieldName, data, logger) {
-    return this.adjust(fieldName, data, logger).then( (rec) => {
-      if (this.validate(fieldName, rec, logger)) {
-        return Promise.resolve(rec)
+  async processKeys(fieldName, fields, data, logger) {
+    let result = {};
+
+    if (fields.value === undefined) {  // value overrules all
+      if (fields.telephoneInt) {
+        data.value = await this._fields.telephoneInt.convert(fieldName, data.telephoneInt, logger)
+      } else if (fields.telephone) {
+        data.value = await this._fields.telephone.convert(fieldName, data.telephone, logger)
       }
-      this.log(logger, 'error', fieldName, `${rec} is not a valid email`)
-      return Promise.resolve('' )
-    })
+    }
+    return Promise.resolve(this.copyFieldsToResult(result, data, ['telephone', 'telephoneInt']))
   }
 }
 

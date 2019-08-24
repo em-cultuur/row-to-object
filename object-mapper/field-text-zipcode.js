@@ -5,7 +5,7 @@
 const FieldText = require('./field-text').FieldText;
 const Countries = require('../lib/lookup').Countries
 
-class FieldZipcode extends FieldText {
+class FieldTextZipcode extends FieldText {
   constructor(options = {}){
     super(options);
     this._name = 'zipcode';
@@ -56,7 +56,7 @@ class FieldZipcode extends FieldText {
   }
 
 }
-module.exports.FieldZipcode = FieldZipcode;
+module.exports.FieldTextZipcode = FieldTextZipcode;
 
 
 

@@ -62,6 +62,10 @@ class FieldObject extends Field {
         result[key] = data[key]
       }
     }
+    // remove the skipped fields
+    for (let l = 0; l < skip.length; l++) {
+      delete result[skip[l]];
+    }
     return result;
   }
   /**

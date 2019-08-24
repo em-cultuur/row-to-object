@@ -6,7 +6,7 @@
  */
 
 const FieldText = require('./field-text').fieldText;
-const FieldEmail = require('./field-email');
+const FieldEmail = require('./field-text-email');
 const Record = require('./record');
 const Logger = require('./logger');
 

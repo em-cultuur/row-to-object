@@ -4,7 +4,7 @@
 
 const Field = require('./field').Field;
 
-class FieldBoolean extends Field {
+class FieldTextBoolean extends Field {
   constructor(options = {}){
     super(options);
     this._name = 'boolean';
@@ -38,4 +38,4 @@ class FieldBoolean extends Field {
     return Promise.resolve(!! data);
   }
 }
-module.exports.FieldBoolean = FieldBoolean;
+module.exports.FieldTextBoolean = FieldTextBoolean;

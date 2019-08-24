@@ -6,8 +6,10 @@ const Field = require('./field').Field;
 const FieldGuid = require('./field-text').FieldGuid;
 const FieldContact  = require('./field-contact').FieldContact;
 const FieldLocation = require('./field-location').FieldLocation;
-const FieldComposed = require('./field-composed').FieldComposed;
 const FieldEmail = require('./field-email').FieldEmail;
+const FieldTelephone = require('./field-telephone').FieldTelephone;
+
+const FieldEmail = require('./field-text-email').FieldEmail;
 
 class Record extends Field {
 
@@ -16,10 +18,10 @@ class Record extends Field {
     this._name = 'record';
     this._fields = {
       id: new FieldGuid(),
-      contact : new FieldArray(   {type: new FieldContact() }),
-      email: new FieldArray(      { type: new FieldComposed({valueType: new FieldEmail()}) } ),
-      telephone: new FieldArray(  { type: new FieldComposed({valueType: new FieldText()}) } ),
-      location: new FieldArray(   { type : FieldLocation() })
+      contact :     new FieldArray( { type: new FieldContact() }),
+      email:        new FieldArray( { type: new FieldEmail() }),
+      telephone:    new FieldArray( { type: new FieldTelephone() } ),
+      location:     new FieldArray( { type: new FieldLocation() })
     }
   }
 
@@ -29,8 +31,10 @@ class Record extends Field {
    * @param logger
    * @param options
    */
-  convert(object, logger, options = {}) {
-
+  convert(fieldName, data, logger) {
+    if (this.validate(fieldName, data, logger)) {
+      return this.adjust(fieldName, data, logger)
+    }
   }
 }
 
