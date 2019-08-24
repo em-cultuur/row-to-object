@@ -23,10 +23,6 @@ const FieldContact = require('../object-mapper/field-contact').FieldContact;
 describe('field',  () => {
   let logger = new Logger({toConsole: false});
 
-  before(() => {
-    return Promise.resolve();
-  });
-
   describe('base', () => {
     let f = new Field();
     logger.clear();
