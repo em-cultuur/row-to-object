@@ -17,6 +17,8 @@
  *
  */
 
+const ErrorTypes = require('error-types');
+
 const Jexl = require('jexl');
 // FOR Error bug:
 // SHOULD PLACE: https://github.com/TomFrost/Jexl/pull/53/commits/78ced5b4400999165c9f1f39cb89e801fe714d53
@@ -36,14 +38,6 @@ Jexl.addBinaryOp('|=|', 20, (a, b) => {
 
 // https://stackoverflow.com/questions/2357618/is-there-such-a-thing-as-a-catch-all-key-for-a-javascript-object
 
-class ErrorFieldNotFound extends Error {
-  constructor(field, message = false) {
-    super(message ? message : `field ${field}`);
-    // can not use this.constructor.name:   it returns 'unexpected string'
-    this.type = 'ErrorFieldNotFound';
-    this.fieldName = field
-  }
-}
 
 // hate globals but the rowLookup keeps dropping the err variable ????
 // let lookupErr = false;
@@ -60,9 +54,7 @@ let rowLookup = {
       if (name === 'column') {
         return obj.row;
       }
-      throw new ErrorFieldNotFound(name);
-//      lookupErr = new ErrorFieldNotFound(name);
-//      return undefined;
+      throw new ErrorTypes.ErrorFieldNotFound(name);
     }
     return obj.row[obj.fieldNames[name]];
   },
