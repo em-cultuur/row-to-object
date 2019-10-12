@@ -216,6 +216,13 @@ class RowToObject2  {
     }
     return result;
   }
+
+  /**
+   * reset the field buffer
+   */
+  reset() {
+    this._didCompile = false;
+  }
 }
 
 module.exports.RowToObject = RowToObject2;

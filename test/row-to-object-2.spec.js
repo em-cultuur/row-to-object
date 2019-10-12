@@ -116,7 +116,8 @@ describe('row-to-object 2',  () => {
           id: "CustomerId + ' - ' + SomeField",
         }
       });
-      let r = conv.convert(['SomeField', 'Customer Id']);
+      let r = conv.convert(['SomeField', 'CustomerId']);
+      assert.isFalse(r, 'first row is fieldnames')
       r = conv.convert(['some', '12345']);
       assert(r.id === '12345 - some', 'did calculate')
     });
