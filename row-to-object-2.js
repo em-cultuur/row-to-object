@@ -150,6 +150,8 @@ class RowToObject2  {
       } catch(e) {
         if (e.type === 'ErrorFieldNotFound') {
           e.fieldName = fieldName + '.' +  e.fieldName;
+        } else if (e instanceof TypeError) {
+          throw new ErrorTypes.ErrorFieldNotFound(fieldName + '.' +  e.fieldName, 'Field is of the wrong type')
         }
         throw e;
       }
