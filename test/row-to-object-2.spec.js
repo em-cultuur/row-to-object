@@ -1,6 +1,6 @@
 const Chai = require('chai');
 const assert = Chai.assert;
-const RtoO = require('../row-to-object-2');
+const RtoO = require('../lib/row-to-object-2');
 
 
 describe('row-to-object 2',  () => {

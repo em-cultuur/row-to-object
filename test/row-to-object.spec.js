@@ -3,7 +3,7 @@
  */
 const Chai = require('chai');
 const assert = Chai.assert;
-const R2O = require('../row-to-object-1');
+const R2O = require('../lib/row-to-object-1');
 const Jexl = require('jexl');
 
 describe('row-to-object',  () => {
