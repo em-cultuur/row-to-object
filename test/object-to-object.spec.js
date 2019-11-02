@@ -1,6 +1,6 @@
 const Chai = require('chai');
 const assert = Chai.assert;
-const Obj = require('../lib/object-to-object');
+const Obj = require('../').ObjectToObject;
 
 
 describe('object-to-object',  () => {
