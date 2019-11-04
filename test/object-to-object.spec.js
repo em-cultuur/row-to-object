@@ -1,6 +1,6 @@
 const Chai = require('chai');
 const assert = Chai.assert;
-const Obj = require('../').ObjectToObject;
+const Obj = require('../');
 
 
 describe('object-to-object',  () => {
@@ -288,5 +288,22 @@ describe('object-to-object',  () => {
       assert(r.text === '12345 is 5', 'did calculate')
     });
   });
+
+
+  describe('now', () => {
+    it('show', () => {
+      let conv = new Obj.ObjectToObject({
+        idField: 'testId',
+        fields: {
+          id: "(CustomerId + ' - ') | trim + SomeField",
+          now: "__date"
+        }
+      });
+      let r = conv.convert({ SomeField: 'some', CustomerId: '12345'});
+      assert.isDefined(r.now, 'did return')
+      console.log('now:', r.now)
+    });
+
+  })
 
 });
