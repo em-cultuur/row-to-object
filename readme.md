@@ -1,6 +1,6 @@
 # row-to-object
 
-Converting a row from CSV or Excel into an object
+Converting a row from CSV or Excel into an object or convert one type of object into an other
 
 ## Install
 
@@ -11,7 +11,7 @@ $ npm install @toxus/row-to-object --save
 ## Usage
 
 ```js
-const Conv = require('@toxus/row-to-object');
+const Conv = require('@toxus/row-to-object').RowToObject;
 
 let converter = new Conv({ type: 'fieldName', fields: {
   id: 'UserNumber',
@@ -53,6 +53,9 @@ for (let l = 0; l < data.length; l++) {
 
 
 ````
+## Special variables
+* __date = the current date
+
 ## Configuring
 The conversion from the row (array) to an object is done by an configuration object. For every
 field in the final object an entry is made. An example:
