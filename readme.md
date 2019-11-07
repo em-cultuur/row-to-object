@@ -56,6 +56,27 @@ for (let l = 0; l < data.length; l++) {
 ## Special variables
 * __date = the current date
 
+## Function
+for formats see: [moment.js](https://momentjs.com/)
+* date - convert the value into a date. Parameter: format
+* dateAdd - add a period to the date: Parameter count, period, 
+* dateSubract - subtract a periode from a date count, period
+
+
+* trim - trims the string
+* ltrim - left trims the string
+* rtrim - right trims the string
+* length - returns the length of the string
+
+examples
+```js
+let config = {
+  subribeDate: "'04-06-2019' | date",
+  endDate: "'04-06-2019' | date | dateAdd('1', 'month')",
+}
+````
+
+
 ## Configuring
 The conversion from the row (array) to an object is done by an configuration object. For every
 field in the final object an entry is made. An example:

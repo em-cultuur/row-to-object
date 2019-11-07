@@ -290,7 +290,7 @@ describe('object-to-object',  () => {
   });
 
 
-  describe('now', () => {
+  describe('date / now', () => {
     it('show', () => {
       let conv = new Obj.ObjectToObject({
         idField: 'testId',
@@ -301,8 +301,39 @@ describe('object-to-object',  () => {
       });
       let r = conv.convert({ SomeField: 'some', CustomerId: '12345'});
       assert.isDefined(r.now, 'did return')
-      console.log('now:', r.now)
+//      console.log('now:', r.now)
     });
+
+    it('parse', () => {
+      let conv = new Obj.ObjectToObject({
+        idField: 'testId',
+        fields: {
+          id: "SomeField",
+          d: "create | date",
+          d2: "dA | date('MM-DD-YYYY')",
+        }
+      });
+      let r = conv.convert({ SomeField: 'some', create: "02-03-1980", dA: "03-02-1980"});
+      assert.isDefined(r.d, 'did return');
+      assert.equal(r.d, '1980-03-02T00:00:00+01:00', 'europe date');
+      assert.equal(r.d2, '1980-03-02T00:00:00+01:00', 'us date');
+    });
+
+    it('calculate', () => {
+      let conv = new Obj.ObjectToObject({
+        idField: 'testId',
+        fields: {
+          id: "SomeField",
+          d1: "create | date",
+          d2: "create | date | dateAdd('7', 'days')",
+          d3: "create | date | dateSubract(1, 'month')",
+        }
+      });
+      let r = conv.convert({ SomeField: 'some', create: "02-03-1980"});
+      assert.equal(r.d1, '1980-03-02T00:00:00+01:00', 'one week');
+      assert.equal(r.d2, '1980-03-09T00:00:00+01:00', 'one week');
+      assert.equal(r.d3, '1980-02-02T00:00:00+01:00', 'one month');
+    })
 
   })
 
