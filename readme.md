@@ -61,7 +61,7 @@ for formats see: [moment.js](https://momentjs.com/)
 * date - convert the value into a date. Parameter: format
 * dateAdd - add a period to the date: Parameter count, period, 
 * dateSubract - subtract a periode from a date count, period
-
+* dateFormat - extract the date in a pref defined format. 
 
 * trim - trims the string
 * ltrim - left trims the string
@@ -73,6 +73,8 @@ examples
 let config = {
   subribeDate: "'04-06-2019' | date",
   endDate: "'04-06-2019' | date | dateAdd('1', 'month')",
+  written: "'20-03-2019' | date | dateFormat('LL')",   // 20 maart 2019
+  other: "20-03-2019' | date | dateFormat('LL', 'fr'), " // 20 mars 2019  
 }
 ````
 

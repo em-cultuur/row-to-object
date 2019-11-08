@@ -333,8 +333,22 @@ describe('object-to-object',  () => {
       assert.equal(r.d1, '1980-03-02T00:00:00+01:00', 'one week');
       assert.equal(r.d2, '1980-03-09T00:00:00+01:00', 'one week');
       assert.equal(r.d3, '1980-02-02T00:00:00+01:00', 'one month');
-    })
+    });
 
+    it('dutch', () => {
+      let conv = new Obj.ObjectToObject({
+        idField: 'testId',
+        fields: {
+          id: "SomeField",
+          d1: "create | date | dateFormat('LL')",
+          d2: "create | date | dateFormat('LL', 'fr')",
+//          d3: "create | date | dateSubract(1, 'month')",
+        }
+      });
+      let r = conv.convert({ SomeField: 'some', create: "20-03-2019"});
+      assert.equal(r.d1, '20 maart 2019', 'in dutch');
+      assert.equal(r.d2, '20 mars 2019', 'in french');
+    })
   })
 
 });
