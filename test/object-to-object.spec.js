@@ -1,6 +1,7 @@
 const Chai = require('chai');
 const assert = Chai.assert;
 const Obj = require('../');
+const Jexl = require('jexl');
 
 
 describe('object-to-object',  () => {
@@ -349,6 +350,33 @@ describe('object-to-object',  () => {
       assert.equal(r.d1, '20 maart 2019', 'in dutch');
       assert.equal(r.d2, '20 mars 2019', 'in french');
     })
-  })
+  });
 
+  describe('select object outof array by jexl', () => {
+    let items = {
+
+    testId: '4321',
+    items: [
+        {name: 'test', value: '1234', active: false},
+        {name: 'jane', value: 'doe', active: 'notRealy'},
+        {name: 'jack', value: 'frost', active: true},
+        {name: { caption: 'test'}, value: '5678'}
+      ]
+    }
+    let conv = new Obj.ObjectToObject({
+      idField: '"testId"',
+      fields: {
+        idField: 'testId',
+        first: "items[2]",
+        active: "items[.active == true][0].name",
+        byName: "items[.name == 'jane'][0].value",
+        byLevel: "items[.name.caption == 'test'][0].value",
+      }
+    });
+    let r = conv.convert(items);
+    assert.equal(r.idField, '4321', 'the number' );
+    assert.equal(r.active, 'jack', 'the name' );
+    assert.equal(r.byName, 'doe', 'found name');
+    assert.equal(r.byLevel, '5678', 'deeper');
+  })
 });
