@@ -314,4 +314,21 @@ describe('row-to-object 2',  () => {
     });
   });
 
+  describe('bad fieldnames', () => {
+    it('- in fieldname', () => {
+      let conv = new RtoO.RowToObject({
+        firstRow: 'fieldName',
+        emptyCheck: 'length',
+        idField: 'SomeField',
+        fields: {
+          id: "SomeField",
+          noField: "field['other-field']"
+        }
+      });
+      let r = conv.convert(['SomeField', "other-field"]);
+      r = conv.convert(['12345', 'this one']);
+      assert(r.id = '12345', 'did add');
+      assert.equal(r.noField, 'this one', 'did find the field');
+    });
+  });
 });

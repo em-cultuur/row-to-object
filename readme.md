@@ -108,6 +108,18 @@ The fields can be addressed in different ways:
 When creating an object the format should be specified (default: index). The first row will be automatically skipped 
 if the type is fieldName
 
+When a column name has a name, that is not allowed like e-mail, j/n, the value of the column
+can still be retrieved by using the option field['fieldname']. An example:
+
+```js
+let config = {
+  location: {
+    email: "field['email']",
+    didSubscribe: "field['subscribe j/n'] == 'j' ? true : false"
+  }
+}
+```
+
 ### object
 A nested object can be created from the row. An example:
 ```js
