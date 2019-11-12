@@ -1,6 +1,6 @@
 {
   "name": "row-to-object",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "Convert a row (from csv, excel) to a structured object and validate the object",
   "main": "index.js",
   "scripts": {
