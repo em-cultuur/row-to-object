@@ -331,4 +331,22 @@ describe('row-to-object 2',  () => {
       assert.equal(r.noField, 'this one', 'did find the field');
     });
   });
+
+  describe('create import date (render todays-date #19)', () => {
+    it('combine text and date', () => {
+      let conv = new RtoO.RowToObject({
+        firstRow: 'fieldName',
+        emptyCheck: 'length',
+        idField: 'SomeField',
+        fields: {
+          id: "SomeField",
+          importDate: "'import: ' + __date"
+        }
+      });
+      let r = conv.convert(['SomeField']);
+      r = conv.convert(['12345']);
+      assert(r.id = '12345', 'did add');
+      assert.include(r.importDate, 'import:', 'did find the field');
+    });
+  });
 });
