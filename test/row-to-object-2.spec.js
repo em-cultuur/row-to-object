@@ -340,13 +340,14 @@ describe('row-to-object 2',  () => {
         idField: 'SomeField',
         fields: {
           id: "SomeField",
-          importDate: "'import: ' + __date"
+          importDate: "'import: ' + __date | dateFormat('YYYY-MM-DD')"
         }
       });
       let r = conv.convert(['SomeField']);
       r = conv.convert(['12345']);
       assert(r.id = '12345', 'did add');
       assert.include(r.importDate, 'import:', 'did find the field');
+      console.log(r.importDate)
     });
   });
 });
