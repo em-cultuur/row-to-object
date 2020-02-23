@@ -5,6 +5,53 @@ const Jexl = require('jexl');
 
 
 describe('object-to-object',  () => {
+
+  describe('transformations', () => {
+
+
+    it('string to array', () => {
+      let conv = new Obj.ObjectToObject({
+        firstRow: 'fieldName',
+        idField: 'testId',
+        fields: {
+          "data1": "value | Object[0]",
+          "data2": "value | Object[1]",
+          "data3": "value | Object[2]"
+        }
+      });
+      let r = conv.convert({value: '[1, 4]'});
+      assert.equal(r.data1, 1, 'did it');
+      assert.equal(r.data2, 4, 'did it');
+      assert.isUndefined(r.data3, 'no value === undefined')
+    });
+    it('string to object', () => {
+      let conv = new Obj.ObjectToObject({
+        firstRow: 'fieldName',
+        idField: 'testId',
+        fields: {
+          "name": "value | Object.name",
+        }
+      });
+      let r = conv.convert({value: '{ "name": "test" }'});
+      assert.equal(r.name, "test", 'did it');
+    });
+
+    it('string to array of objects and filter the objects', () => {
+      let conv = new Obj.ObjectToObject({
+        firstRow: 'fieldName',
+        idField: 'testId',
+        fields: {
+          "val": "value | Object",
+          "val2": "value | Object[.name == 'test2'].value",
+        }
+      });
+      let r = conv.convert({value: '[ {"name": "test1", "value": 1}, {"name": "test2", "value": 2}]'});
+      assert.equal(r.val2, 2, 'did it');
+    });
+
+  });
+
+
   describe('fixed values', () => {
     it('read value', () => {
       let conv = new Obj.ObjectToObject({
@@ -378,5 +425,19 @@ describe('object-to-object',  () => {
     assert.equal(r.active, 'jack', 'the name' );
     assert.equal(r.byName, 'doe', 'found name');
     assert.equal(r.byLevel, '5678', 'deeper');
+  });
+
+  describe('do calculations', () => {
+    it('format date', () => {
+      let conv = new Obj.ObjectToObject({
+        firstRow: 'fieldName',
+        idField: 'testId',
+        fields: {
+          "code": "'import:' + __date | dateFormat('LL')",
+        }
+      });
+      let r = conv.convert({code: 'some',});
+      assert.include(r.code, 'import:' , 'did it')
+    });
   })
 });

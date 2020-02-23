@@ -78,6 +78,20 @@ let config = {
 }
 ````
 
+## converting
+To convert a Javascript JSON into an object to be parsed Object is added.
+examples:
+```javascript
+let config = {
+  arrayElm1: "['elm1', 'elm2'] | Object[1]", // return 'elm2'
+  arrayElm2: "['elm1', 'elm2'] | Object[3]", // return undefined
+  objElm: '{"name": "John", "last": "Doe"}| Object.name', // returns 'John'
+  arrayObject: '[{"name": "John", "last": "Doe"}, {"name": "Jane", "last": "Both"}] | Object[.last == "Doe"].name' // John
+}
+```
+The last **arrayObject** does a filter on the array. The statement [.last == "Doe"] filters all elements that have
+"Doe" as last. More information on filtering can be found in the [Jexl documentation](https://www.npmjs.com/package/jexl)
+
 
 ## Configuring
 The conversion from the row (array) to an object is done by an configuration object. For every
