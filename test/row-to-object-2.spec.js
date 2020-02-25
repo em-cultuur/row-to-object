@@ -14,7 +14,7 @@ describe('row-to-object 2',  () => {
           id: "'the id'",
           "telephone": [
             {
-              "isDefault": true,
+              "isDefault": "true",
               "telephone10": "telefoon",
               "typeId": "113",
 
