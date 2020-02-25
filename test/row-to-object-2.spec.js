@@ -4,6 +4,32 @@ const RtoO = require('../lib/row-to-object-2');
 
 
 describe('row-to-object 2',  () => {
+
+  describe('isDefault', () => {
+    it('find the isDefault', () => {
+      let conv = new RtoO.RowToObject({
+        firstRow: 'fieldName',
+        idField: 'testId',
+        fields: {
+          id: "'the id'",
+          "telephone": [
+            {
+              "isDefault": true,
+              "telephone10": "telefoon",
+              "typeId": "113",
+
+            },
+          ]
+        }
+      });
+      // set the fieldname by the header
+      let r = conv.convert(['SomeField', 'telefoon'])
+      assert(r === false, 'no data');
+      r = conv.convert(['some', '12345']);
+      assert(r.id === 'the id', 'did read the id')
+    });
+
+  });
   describe('fixed values', () => {
     it('read value', () => {
       let conv = new RtoO.RowToObject({ firstRow: 'fieldName',  idField: 'testId',
