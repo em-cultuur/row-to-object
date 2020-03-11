@@ -89,6 +89,19 @@ let config = {
   arrayObject: '[{"name": "John", "last": "Doe"}, {"name": "Jane", "last": "Both"}] | Object[.last == "Doe"].name' // John
 }
 ```
+## string manipulation
+Taking part of a string can be done with **substr**
+examples:
+```javascript
+let telephone = 'Some Textual'
+let config = {
+    "first": "telefoon[0]",                  // 'S'
+    "second": "telefoon | substr(5)",        // 'Textual'
+    "third": "telefoon | substr(5,4)",       // 'Text'
+}
+```
+
+
 The last **arrayObject** does a filter on the array. The statement [.last == "Doe"] filters all elements that have
 "Doe" as last. More information on filtering can be found in the [Jexl documentation](https://www.npmjs.com/package/jexl)
 

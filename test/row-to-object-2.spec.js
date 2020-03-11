@@ -5,6 +5,33 @@ const RtoO = require('../lib/row-to-object-2');
 
 describe('row-to-object 2',  () => {
 
+  describe('string manipulation', () => {
+    it('get first character', () => {
+      let conv = new RtoO.RowToObject({
+        firstRow: 'fieldName',
+        idField: 'testId',
+        fields: {
+          id: "'the id'",
+          "telephone": [
+            {
+              "first": "telefoon[0]",
+              "second": "telefoon | substr(4)",
+              "third": "telefoon | substr(4,2)",
+            },
+          ]
+        }
+      });
+      // set the fieldname by the header
+      let r = conv.convert(['SomeField', 'telefoon']);
+      assert(r === false, 'no data');
+      r = conv.convert(['some', 'Een Woord']);
+      assert(r.id === 'the id', 'did read the id');
+      assert.equal(r.telephone[0].first, 'E', 'Only the first');
+      assert.equal(r.telephone[0].second, 'Woord');
+      assert.equal(r.telephone[0].third,'Wo');
+    });
+  });
+
   describe('isDefault', () => {
     it('find the isDefault', () => {
       let conv = new RtoO.RowToObject({
@@ -23,7 +50,7 @@ describe('row-to-object 2',  () => {
         }
       });
       // set the fieldname by the header
-      let r = conv.convert(['SomeField', 'telefoon'])
+      let r = conv.convert(['SomeField', 'telefoon']);
       assert(r === false, 'no data');
       r = conv.convert(['some', '12345']);
       assert(r.id === 'the id', 'did read the id')
@@ -37,7 +64,7 @@ describe('row-to-object 2',  () => {
           id: "'the id'",
         }
       });
-      let r = conv.convert(['SomeField', 'CustomerId'])
+      let r = conv.convert(['SomeField', 'CustomerId']);
       assert(r === false, 'no data');
       r = conv.convert(['some', '12345']);
       assert(r.id === 'the id', 'did read the id')
@@ -49,7 +76,7 @@ describe('row-to-object 2',  () => {
           id: "'the id' + ' some more'",
         }
       });
-      let r = conv.convert(['SomeField', 'CustomerId'])
+      let r = conv.convert(['SomeField', 'CustomerId']);
       r = conv.convert(['some', '12345']);
       assert(r.id === 'the id some more', 'did read the id')
     })
@@ -62,7 +89,7 @@ describe('row-to-object 2',  () => {
           id: "CustomerId",
         }
       });
-      let r = conv.convert(['SomeField', 'CustomerId'])
+      let r = conv.convert(['SomeField', 'CustomerId']);
       r = conv.convert(['some', '12345']);
       assert(r.id === '12345', 'did read the id')
     });
