@@ -1,8 +1,9 @@
 # row to object
 ## revisions
 
-### 2020-03-11 - 0.7.1 _(jay)_
+### 2020-03-11 - 0.7.2 _(jay)_
 - added **substr** function:   'test' | substr(0,2) === 'te'
+- added **field** to the object definition
 
 ### 2020-02-23 - 0.7.0 _(jay)_
 - start revisions documentation

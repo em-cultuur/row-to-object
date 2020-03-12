@@ -6,7 +6,9 @@ const Jexl = require('jexl');
 
 describe('object-to-object',  () => {
 
+
   describe('transformations', () => {
+
 
 
     it('string to array', () => {
@@ -325,6 +327,18 @@ describe('object-to-object',  () => {
       assert(r.id = '12345 -some', 'did calculate')
     });
 
+    it('field object', () => {
+      let conv = new Obj.ObjectToObject({
+        firstRow: 'fieldName',
+        idField: 'testId',
+        fields: {
+          "name": "field['value']",
+        }
+      });
+      let r = conv.convert({value: 'some value'});
+      assert.equal(r.name, "some value", 'did it');
+    });
+
     it('length', () => {
       let conv = new Obj.ObjectToObject({
         idField: 'testId',
@@ -399,7 +413,7 @@ describe('object-to-object',  () => {
     })
   });
 
-  describe('select object outof array by jexl', () => {
+  describe('select object out of array by jexl', () => {
     let items = {
 
     testId: '4321',
@@ -440,4 +454,5 @@ describe('object-to-object',  () => {
       assert.include(r.code, 'import:' , 'did it')
     });
   })
+
 });
