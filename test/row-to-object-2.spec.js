@@ -4,6 +4,25 @@ const RtoO = require('../lib/row-to-object-2');
 
 
 describe('row-to-object 2',  () => {
+  describe('Boolean eval', () => {
+    it('check boolean', () => {
+      let conv = new RtoO.RowToObject({
+        firstRow: 'fieldName',
+        idField: 'testId',
+        fields:
+          {
+            "booleanVal": "introducee |=| 'JA' ? true : false",
+          }
+      });
+      let r = conv.convert(['testId', 'introducee']);
+      r = conv.convert(['123', 'JA']);
+      assert(r.booleanVal, true, 'did set to true');
+      r = conv.convert(['123', 'Nee']);
+      assert.equal(r.booleanVal, false, 'not true')
+
+    });
+  });
+
 
   describe('string manipulation', () => {
     it('get first character', () => {
@@ -32,6 +51,7 @@ describe('row-to-object 2',  () => {
     });
   });
 
+
   describe('isDefault', () => {
     it('find the isDefault', () => {
       let conv = new RtoO.RowToObject({
@@ -55,8 +75,8 @@ describe('row-to-object 2',  () => {
       r = conv.convert(['some', '12345']);
       assert(r.id === 'the id', 'did read the id')
     });
-
   });
+
   describe('fixed values', () => {
     it('read value', () => {
       let conv = new RtoO.RowToObject({ firstRow: 'fieldName',  idField: 'testId',
@@ -403,4 +423,5 @@ describe('row-to-object 2',  () => {
       console.log(r.importDate)
     });
   });
+
 });

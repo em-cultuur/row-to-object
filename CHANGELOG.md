@@ -1,6 +1,9 @@
 # row to object
 ## revisions
 
+### 2020-03-23 - 0.7.4 _(jay)_
+- Fix booleann does not return because of undefined
+
 ### 2020-03-14 - 0.7.3 _(jay)_
 - Error trapping and prolongation repair in the Jexl (now on em-cultuur)
 
