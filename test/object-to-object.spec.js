@@ -6,6 +6,19 @@ const Jexl = require('jexl');
 
 describe('object-to-object',  () => {
 
+  it('Boolean eval', () => {
+    let conv = new Obj.ObjectToObject({
+      firstRow: 'fieldName',
+      idField: 'testId',
+      fields: {
+        "booleanVal": "introducee |=| 'JA' ? true : false",
+      }
+    });
+    let r = conv.convert({introducee: 'JA'});
+    assert(r.booleanVal, true, 'did set to true');
+    r = conv.convert({introducee: 'Nee'});;
+    assert.equal(r.booleanVal, false, 'not true')
+  });
 
   describe('transformations', () => {
 
