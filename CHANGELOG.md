@@ -1,6 +1,9 @@
 # row to object
 ## revisions
 
+### 2020-03-31 - 0.8.0 _(jay)_
+- changed ownership to em-cultuur
+
 ### 2020-03-23 - 0.7.5 _(jay)_
 - Fix boolean does not return in Object to Object
 
