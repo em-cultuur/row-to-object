@@ -2,11 +2,6 @@
 
 Converting a row from CSV or Excel into an object or convert one type of object into an other
 
-## Install
-
-```
-$ npm install @toxus/row-to-object --save
-```
 
 ## Usage
 
@@ -196,14 +191,6 @@ the final object.
 
 
 
-
- 
- 
-## Maintainers
-
-- [Jaap van der Kreeft](https://github.com/toxus)
-
-
 ## License
 
-(c) 2019 Toxus, MIT
+(c) 2019-2020 EM-Cultuur, MIT
