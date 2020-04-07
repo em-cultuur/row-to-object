@@ -476,5 +476,5 @@ describe('row-to-object 2',  () => {
     })
   })
 
-  describe
+  // describe
 });
