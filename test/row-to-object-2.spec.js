@@ -474,7 +474,85 @@ describe('row-to-object 2',  () => {
       assert.isDefined(r.arrayLength);
       assert.equal(r.arrayLength, 2);
     })
-  })
+  });
 
-  // describe
+  describe('loops', () => {
+    let conv;
+    let r;
+
+    before( () => {
+      conv = new RtoO.RowToObject({
+        fields: {
+          id: "idField",
+          arrayField: "arrayField | split(',')",
+          code: {
+            $$LOOP: [{
+              count: "arrayField | split(',') | length",
+              index: "$$INDEX",
+              block: {
+                name: "arrayField | split(',') [$$INDEX]",
+                text: "'$$INDEX'"
+              }
+            }]
+          },
+          codeNoArray: {
+            $$LOOP: {
+              count: "arrayField | split(',') | length",
+              index: "$$INDEX",
+              block: {
+                name: "arrayField | split(',') [$$INDEX]",
+                text: "'$$INDEX'"
+              }
+            }
+          },
+          codeInclude: {
+            $$LOOP: {
+              count: "arrayField | split(',') | length",
+              index: "$$INDEX",
+              block: {
+                name: "arrayField | split(',') [$$INDEX]",
+                text: "'$$INDEX'"
+              },
+              include: [
+                {
+                  name: "idField",
+                  text: '6'
+                }
+              ]
+            }
+          },
+
+        }
+      });
+      r = conv.convert(['idField', 'arrayField']);
+    });
+
+    it('basic test', () => {
+      r = conv.convert(['id value', 'val1, val2']);
+      assert.equal(r.id, 'id value');
+      assert.equal(r.code.length, 2);
+      assert.equal(r.code[0].text, '0');
+      assert.equal(r.code[1].name, 'val2');
+    });
+    it('empty test', () => {
+      r = conv.convert(['id value', '']);
+      assert.equal(r.id, 'id value');
+      assert.isUndefined(r.code);
+    });
+    it('no loop array', () => {
+      r = conv.convert(['id value', 'val1, val2']);
+      assert.equal(r.id, 'id value');
+      assert.equal(r.codeNoArray.length, 2);
+      assert.equal(r.codeNoArray[0].text, '0');
+      assert.equal(r.codeNoArray[1].name, 'val2');
+    });
+    it('include others', () => {
+      r = conv.convert(['id value', 'val1, val2']);
+      assert.equal(r.id, 'id value');
+      assert.equal(r.codeInclude.length, 3);
+      assert.equal(r.codeInclude[0].text, '0');
+      assert.equal(r.codeInclude[2].name, 'id value');
+      assert.equal(r.codeInclude[2].text, '6');
+    })
+  })
 });

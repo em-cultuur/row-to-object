@@ -84,6 +84,19 @@ let config = {
   arrayObject: '[{"name": "John", "last": "Doe"}, {"name": "Jane", "last": "Both"}] | Object[.last == "Doe"].name' // John
 }
 ```
+
+To convert a string into an array the **split** can be used:
+```javascript
+let config = {
+  arrayElm1: "'elm1, elm2, elm3' | Split(',')[1]", // return 'elm2'
+  arrayElm2: "'elm1, elm2, elm3' | Split(',').length", // return 3
+  arrayElm3: "'' | Split(',')", // return undefined
+  arrayElm4: "'elm1, elm2, elm3' | Split(',', 2).length", // return 2
+}
+```
+The split take two parameters, the first is the string used to split the original string, the second is the limit of the
+count of elements in the array. The rest is removed.
+
 ## string manipulation
 Taking part of a string can be done with **substr**
 examples:
@@ -96,9 +109,36 @@ let config = {
 }
 ```
 
-
 The last **arrayObject** does a filter on the array. The statement [.last == "Doe"] filters all elements that have
 "Doe" as last. More information on filtering can be found in the [Jexl documentation](https://www.npmjs.com/package/jexl)
+```javascript
+let  code = {
+    '$$LOOP': {
+      count: "arrayField | split(',') | length",     
+      block: {
+        name: "arrayField | split(',') [$$INDEX]",
+        text: "'$$INDEX'"
+      },
+      include: [
+       {
+         name: "idField",
+         text: '6'
+       }
+     ]
+    }
+  }
+```
+The parts of the loop construct:
+* $$LOOP - this defines that a loop is defined :)) It's case-sensitive and the result will be added to the parent (code in this case)
+* count - the total number of time the itteration has to be done. The current index is defined by the $$INDEX variable. 
+If there are multiple indexes the name can be defined by the index property
+* block - the part that will be repeated count times. 
+* include - the extra element that have to be included. Because only one **code** can exist in the fields structure, the include makes it
+possible to add extra code elements to the array. Its the 'normal' contact from the code
+
+
+## looping
+To process arrays the loop can be used. Loop are defined als normal variables.
 
 
 ## Configuring

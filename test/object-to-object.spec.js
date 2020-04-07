@@ -466,6 +466,40 @@ describe('object-to-object',  () => {
       let r = conv.convert({code: 'some',});
       assert.include(r.code, 'import:' , 'did it')
     });
+  });
+
+  describe('split', () => {
+    it('string', () => {
+      let conv = new Obj.ObjectToObject({
+        fields: {
+          arrayField: "arrayField | split(';')"
+        }});
+      let r = conv.convert({ arrayField: 'val1;val2'});
+      assert.equal(r.arrayField.length, 2)
+    });
+  });
+  describe('loop', () => {
+    it('string', () => {
+      let conv = new Obj.ObjectToObject({
+
+        fields: {
+          // arrayField: "arrayField | split(',')",
+          code: {
+            $$LOOP: [{
+              count: "arrayField | split(',') | length",
+              index: "$$INDEX",
+              block: {
+                name: "arrayField | split(',') [$$INDEX]",
+                text: "'$$INDEX'"
+              }
+            }]
+          }
+        }
+      });
+      // true test are in the row-to-object definition
+      let r = conv.convert({ arrayField: 'val1, val2'});
+      assert.equal(r.code.length, 2)
+    });
   })
 
 });
