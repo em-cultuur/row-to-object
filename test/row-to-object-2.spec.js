@@ -420,8 +420,61 @@ describe('row-to-object 2',  () => {
       r = conv.convert(['12345']);
       assert(r.id = '12345', 'did add');
       assert.include(r.importDate, 'import:', 'did find the field');
-      console.log(r.importDate)
+//      console.log(r.importDate)
     });
   });
 
+  describe('arrays', () => {
+    let conv;
+    let r;
+
+    before( () => {
+      conv = new RtoO.RowToObject({
+        fields: {
+          id: "idField",
+          arrayField: "arrayField | split(';')",
+          arrayLimit: "arrayLimit | split(';', 2)",
+          arrayLength: "arrayField | split(';') | length",
+        }
+      });
+      r = conv.convert(['idField', 'arrayField', 'arrayLimit', 'arrayLength']);
+    });
+
+    it('basic test', () => {
+      r = conv.convert(['id value', 'array value']);
+      assert.equal(r.id, 'id value');
+    });
+
+    it('split', () => {
+      r = conv.convert(['id value', 'val1;val2']);
+      assert.isDefined(r.arrayField);
+      assert.equal(r.arrayField.length, 2);
+      assert.equal(r.arrayField[1], 'val2')
+    });
+
+    it('split and trim', () => {
+      r = conv.convert(['id value', 'val1 ; val2 ']);
+      assert.isDefined(r.arrayField);
+      assert.equal(r.arrayField.length, 2);
+      assert.equal(r.arrayField[1], 'val2')
+    });
+    it('split empty', () => {
+      r = conv.convert(['id value', '']);
+      assert.isDefined(r.arrayField);
+      assert.equal(r.arrayField.length, 0);
+    });
+    it('split limit', () => {
+      r = conv.convert(['id value', '', 'val 1; val 2; val 3']);
+      assert.isDefined(r.arrayLimit);
+      assert.equal(r.arrayLimit.length, 2);
+    });
+
+    it('split length', () => {
+      r = conv.convert(['id value', 'val1;val2']);
+      assert.isDefined(r.arrayLength);
+      assert.equal(r.arrayLength, 2);
+    })
+  })
+
+  describe
 });

@@ -1,6 +1,11 @@
 # row to object
 ## revisions
 
+### 2020-04-07 - 0.9.0 _(jay)_
+- change default row.firstRow to 'fieldName' (was 'index')
+- added split(separator, limit) to convert strings into arrays (test in row)
+
+
 ### 2020-03-31 - 0.8.0 _(jay)_
 - changed ownership to em-cultuur
 
