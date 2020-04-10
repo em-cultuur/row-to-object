@@ -1,5 +1,8 @@
 # row to object
 ## revisions
+### 2020-04-10 - 0.9.2 _(jay)_
+- error in length calculation
+
 
 ### 2020-04-10 - 0.9.1 _(jay)_
 - missing ErrorTypes include
