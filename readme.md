@@ -88,10 +88,10 @@ let config = {
 To convert a string into an array the **split** can be used:
 ```javascript
 let config = {
-  arrayElm1: "'elm1, elm2, elm3' | Split(',')[1]", // return 'elm2'
-  arrayElm2: "'elm1, elm2, elm3' | Split(',').length", // return 3
+  arrayElm1: "'elm1, elm2, elm3' | split(',')[1]", // return 'elm2'
+  arrayElm2: "'elm1, elm2, elm3' | split(',').length", // return 3
   arrayElm3: "'' | Split(',')", // return undefined
-  arrayElm4: "'elm1, elm2, elm3' | Split(',', 2).length", // return 2
+  arrayElm4: "'elm1, elm2, elm3' | split(',', 2).length", // return 2
 }
 ```
 The split take two parameters, the first is the string used to split the original string, the second is the limit of the
