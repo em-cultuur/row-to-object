@@ -3,7 +3,7 @@
 
 ### 2020-04-10 - 0.9.1 _(jay)_
 - missing ErrorTypes include
-
+- length of undefined returns an error
 
 ### 2020-04-07 - 0.9.0 _(jay)_
 - change default row.firstRow to 'fieldName' (was 'index')

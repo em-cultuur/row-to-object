@@ -505,6 +505,16 @@ describe('row-to-object 2',  () => {
               }
             }
           },
+          codeNoNumber: {
+            $$LOOP: {
+              count: "undefined",
+              index: "$$INDEX",
+              block: {
+                name: "arrayField | split(',') [$$INDEX]",
+                text: "'$$INDEX'"
+              }
+            }
+          },
           codeInclude: {
             $$LOOP: {
               count: "arrayField | split(',') | length",
