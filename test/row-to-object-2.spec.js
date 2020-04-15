@@ -565,6 +565,26 @@ describe('row-to-object 2',  () => {
       assert.equal(r.codeInclude[2].text, '6');
     })
   })
+  describe('html', () => {
+    let conv;
+
+    before( () => {
+      conv = new RtoO.RowToObject({
+        fields: {
+          id: "idField",
+          html: "textField | nl2br",
+          xml: "textField | nl2br(true)"
+        }
+      });
+      r = conv.convert(['idField', 'textField']);
+    });
+
+    it('nl2br html', () => {
+      r = conv.convert(['id value', 'the hound\nand the fox']);
+      assert.equal(r.html, 'the hound<br>\nand the fox');
+      assert.equal(r.xml, 'the hound<br />\nand the fox');
+    })
+  });
 });
 
 

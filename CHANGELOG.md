@@ -1,5 +1,8 @@
 # row to object
 ## revisions
+## 2020-04-15 0.9.3
+- n2br
+
 ### 2020-04-10 - 0.9.2 _(jay)_
 - error in length calculation
 
