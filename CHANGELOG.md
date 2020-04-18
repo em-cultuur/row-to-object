@@ -1,5 +1,9 @@
 # row to object
 ## revisions
+
+## 2020-04-18
+- \#emptyCheck to change the behavour of the empty remove. Values are none, length
+
 ## 2020-04-15 0.9.3
 - n2br
 

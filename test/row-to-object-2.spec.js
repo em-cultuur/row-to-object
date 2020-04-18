@@ -585,6 +585,65 @@ describe('row-to-object 2',  () => {
       assert.equal(r.xml, 'the hound<br />\nand the fox');
     })
   });
+
+  describe('emptyCheck', () => {
+    let conv;
+    let conv2;
+
+    before( () => {
+      conv = new RtoO.RowToObject({
+        fields: {
+          id: "idField",
+          contact: [
+            {
+              name: 'name',
+              locator: {
+                locName: 'name',
+                subKey: 'subKey'
+              }
+            }
+          ]
+        }
+      });
+      conv2 = new RtoO.RowToObject({
+        fields: {
+          id: "idField",
+          contact: [
+            {
+              name: 'name',
+              locator: {
+                '#emptyCheck': 'none',
+                locName: 'name',
+                subKey: 'subKey'
+              }
+            }
+          ]
+        }
+      });
+      r = conv.convert(['idField', 'name', 'subKey']);
+      r = conv2.convert(['idField', 'name', 'subKey']);
+    });
+
+    it('with values', () => {
+      r = conv.convert(['id value', 'The name', 'The sub']);
+      assert.equal(r.contact[0].name, 'The name');
+      assert.equal(r.contact[0].locator.locName, 'The name');
+      assert.equal(r.contact[0].locator.subKey, 'The sub');
+    });
+    it('remove values', () => {
+      r = conv.convert(['id value', 'The name', '']);
+      assert.equal(r.contact[0].name, 'The name');
+      assert.equal(r.contact[0].locator.locName, 'The name');
+      assert.isUndefined(r.contact[0].locator.subKey);
+    })
+    it('remove values', () => {
+       r = conv2.convert(['id value', 'The name', '']);
+       assert.equal(r.contact[0].name, 'The name');
+       assert.equal(r.contact[0].locator.locName, 'The name');
+       assert.equal(r.contact[0].locator.subKey, '');
+    })
+
+  })
 });
 
 
