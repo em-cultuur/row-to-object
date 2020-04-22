@@ -1,6 +1,6 @@
 {
   "name": "row-to-object",
-  "version": "0.9.4",
+  "version": "0.10.0",
   "description": "Convert a row (from csv, excel) to a structured object and validate the object",
   "main": "index.js",
   "scripts": {
@@ -12,6 +12,7 @@
     "error-types": "git+https://github.com/jaymcanser/error-types.git",
     "jexl": "git+https://github.com/em-cultuur/Jexl.git",
     "lodash": "^4.17.15",
+    "md5": "^2.2.1",
     "moment": "^2.24.0",
     "parse-full-name": "github:em-cultuur/parse-full-name"
   },

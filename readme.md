@@ -109,6 +109,27 @@ let config = {
 }
 ```
 
+## string replacement
+examples:
+```javascript
+let telephone = 'Some Textual'
+let config = {
+    "first": "telephone | replace('Some', 'No')",         // 'No Textuals'
+}
+```
+
+## guid creation
+examples:
+```javascript
+let telephone = 'Some Textual'
+let config = {
+    "first": "telephone | md5",                 // generate a 32 byte md5 of the text,
+    "guid": "telephone | guid",                 // generate a 20 byte md5,
+    "shortGuid": "'c' + (telephone | guid(19))" // generate c + 19 byte md5
+}
+```
+
+
 The last **arrayObject** does a filter on the array. The statement [.last == "Doe"] filters all elements that have
 "Doe" as last. More information on filtering can be found in the [Jexl documentation](https://www.npmjs.com/package/jexl)
 ```javascript

@@ -586,6 +586,53 @@ describe('row-to-object 2',  () => {
     })
   });
 
+  describe('replace', () => {
+    let conv;
+
+    before( () => {
+      conv = new RtoO.RowToObject({
+        fields: {
+          id: "idField",
+          text: "textField | replace('the', 'a') "
+        }
+      });
+      r = conv.convert(['idField', 'textField']);
+    });
+
+    it('change', () => {
+      r = conv.convert(['id value', 'the hound and the fox']);
+      assert.equal(r.text, 'a hound and a fox');
+    })
+  });
+
+  describe('md5 / guid', () => {
+    let conv;
+
+    before( () => {
+      conv = new RtoO.RowToObject({
+        fields: {
+          id: "idField",
+          text: "textField | md5 ",
+          guid: "textField | guid",
+          length: "textField | guid | length",
+          shortGuid: "'c' + (textField | guid(19))"
+
+        }
+      });
+      r = conv.convert(['idField', 'textField']);
+    });
+
+    it('change', () => {
+      r = conv.convert(['id value', 'the hound and the fox']);
+      assert.equal(r.text, '22eac4c3cb33578c54154a7ab339e54a');
+      assert.equal(r.length, 20);
+      assert.equal(r.guid, r.text.substr(0,20));
+      assert.equal(r.shortGuid, 'c' + r.text.substr(0,19));
+    })
+
+  });
+
+
   describe('emptyCheck', () => {
     let conv;
     let conv2;
