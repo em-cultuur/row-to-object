@@ -1,6 +1,9 @@
 # row to object
 ## revisions
 
+## 2020-04-23
+- better guid (36 based)
+
 ## 2020-04-22
 - added guid(length) and md5
 

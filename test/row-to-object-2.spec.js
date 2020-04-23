@@ -626,8 +626,8 @@ describe('row-to-object 2',  () => {
       r = conv.convert(['id value', 'the hound and the fox']);
       assert.equal(r.text, '22eac4c3cb33578c54154a7ab339e54a');
       assert.equal(r.length, 20);
-      assert.equal(r.guid, r.text.substr(0,20));
-      assert.equal(r.shortGuid, 'c' + r.text.substr(0,19));
+      assert.equal(r.guid, '22F23S6M94BO04SGSCWS');
+      assert.equal(r.shortGuid, 'c' + '22F23S6M94BO04SGSCWS'.substr(0,19));
     })
 
   });
