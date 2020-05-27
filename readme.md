@@ -128,6 +128,19 @@ let config = {
     "shortGuid": "'c' + (telephone | guid(19))" // generate c + 19 byte md5
 }
 ```
+## split
+examples:
+```javascript
+let telephone = 'Some Textual'
+let config = {
+  result: "text | slot(' - ')",              // on text = 'world' -> ' - world'
+  combine: "'test' + text | slot(', ')",     // on text = 'world' -> ' test, world'
+  resultFalse: "text | slot(' - ')",         // on text = false -> 'world'
+  resultUndefined: "text | slot(' - ')",     // on text = undefined -> 'world'
+}
+```
+
+
 
 
 The last **arrayObject** does a filter on the array. The statement [.last == "Doe"] filters all elements that have

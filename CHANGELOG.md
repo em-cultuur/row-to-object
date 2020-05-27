@@ -1,5 +1,9 @@
 # row to object
 ## revisions
+## 2020-05-27
+- fix: undefined value of property does not handled properly
+- add: split(prefix) so we can evaluate easy  "lastname + (name | split('-'))  to retrieve McAnser, Jay"
+
 
 ## 2020-04-23
 - better guid (36 based)

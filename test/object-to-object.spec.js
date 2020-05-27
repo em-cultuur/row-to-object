@@ -478,6 +478,27 @@ describe('object-to-object',  () => {
       assert.equal(r.arrayField.length, 2)
     });
   });
+
+  describe('slot', () => {
+    it('string', () => {
+      let conv = new Obj.ObjectToObject({
+        emptyCheck: 'none',
+        fields: {
+          result: "text | slot(' - ')",
+          combine: "'test' + text | slot(', ')"
+        }});
+      let r = conv.convert({ text: 'the test'});
+      assert.equal(r.result, ' - the test');
+      assert.equal(r.combine, 'test, the test')
+      r = conv.convert({ text: false});
+      assert.equal(r.result, '');
+      assert.equal(r.combine, 'test');
+      r = conv.convert({ text: undefined});
+      assert.equal(r.result, '');
+      assert.equal(r.combine, 'test')
+    });
+  });
+
   describe('loop', () => {
     it('string', () => {
       let conv = new Obj.ObjectToObject({
@@ -501,5 +522,6 @@ describe('object-to-object',  () => {
       assert.equal(r.code.length, 2)
     });
   })
+
 
 });
