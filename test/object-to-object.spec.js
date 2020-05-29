@@ -479,6 +479,23 @@ describe('object-to-object',  () => {
     });
   });
 
+  describe('toString', () => {
+    it('object', () => {
+      let conv = new Obj.ObjectToObject({
+        fields: {
+          string: "'string' | asString",
+          variable: 'testVal | asString',
+          obj: '{name: "test"} | asString',
+        }});
+      let r = conv.convert({ testVal: 'testValue'});
+      assert.equal(r.string, 'string');
+      assert.equal(r.variable, 'testValue');
+      assert.equal(typeof r.obj, 'string');
+      assert.equal(r.obj, '{"name":"test"}');
+
+    });
+  });
+
   describe('slot', () => {
     it('string', () => {
       let conv = new Obj.ObjectToObject({

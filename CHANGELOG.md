@@ -4,6 +4,7 @@
 ## 2020-05-29
 - add: options.evalString. if set and the value of object is equal the text is intepreted as eval otherwise as string
 - add: Loop: header and footer vs include
+- add: asString to read the raw information of a key
 
 ## 2020-05-27
 - fix: undefined value of property does not handled properly
