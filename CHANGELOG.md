@@ -1,5 +1,9 @@
 # row to object
 ## revisions
+
+## 2020-05-29
+- add: options.evalString. if set and the value of object is equal the text is intepreted as eval otherwise as string
+
 ## 2020-05-27
 - fix: undefined value of property does not handled properly
 - add: split(prefix) so we can evaluate easy  "lastname + (name | split('-'))  to retrieve McAnser, Jay"

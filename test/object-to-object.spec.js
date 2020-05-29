@@ -523,5 +523,20 @@ describe('object-to-object',  () => {
     });
   })
 
+  describe('standard === string', () => {
+    it('string', () => {
+      let conv = new Obj.ObjectToObject({
+        emptyCheck: 'none',
+        evalString: '##',
+        fields: {
+          resultText: "text | slot(' - ')",
+          result: "##text | slot(' - ')",
+          combine: "'test' + text | slot(', ')"
+        }});
+      let r = conv.convert({ text: 'the test'});
+      assert.equal(r.result, ' - the test');
+      assert.equal(r.resultText, 'text | slot(\' - \')')
+    });
+  });
 
 });
