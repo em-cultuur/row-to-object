@@ -535,6 +535,7 @@ describe('object-to-object',  () => {
         }});
       let r = conv.convert({ text: 'the test'});
       assert.equal(r.result, ' - the test');
+
       assert.equal(r.resultText, 'text | slot(\' - \')')
     });
   });
