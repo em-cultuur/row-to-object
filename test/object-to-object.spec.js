@@ -516,6 +516,27 @@ describe('object-to-object',  () => {
     });
   });
 
+  describe('padStart', () => {
+    it('string', () => {
+      let conv = new Obj.ObjectToObject({
+        emptyCheck: 'none',
+        fields: {
+          text: "idText |padStart(5, '0')",
+          number: "idNumber |padStart(5, '0')",
+          boolTrue: "idBoolTrue | padStart(5, '0')",
+          boolFalse: "idBoolFalse | padStart(5, '0')",
+          other: "idOther| padStart(5, '0')"
+        }});
+      let r = conv.convert({ idText: '5', idNumber: 4, idBoolTrue: true, idBoolFalse: false, idOther: {x: 1}});
+      assert.equal(r.text, '00005');
+      assert.isTrue(r.number === '00004');
+      assert.equal(r.boolTrue, '00001' )
+      assert.equal(r.boolFalse, '00000' )
+      assert.equal(r.other.toString(), {x:1}.toString() )
+    })
+
+  });
+
   describe('loop', () => {
     it('string', () => {
       let conv = new Obj.ObjectToObject({

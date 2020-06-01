@@ -140,6 +140,20 @@ let config = {
 }
 ```
 
+## padStart
+examples:
+```javascript
+let telephone = 'Some Textual'
+let config = {
+  text: "idText |padStart(5, '0')",               // '00005'
+  number: "idNumber |padStart(5, '0')",           // '00004'
+  boolTrue: "idBoolTrue | padStart(5, '0')",      // '00001'
+  boolFalse: "idBoolFalse | padStart(5, '0')",    // '00000'
+  other: "idOther| padStart(5, '0')"              // {x: 1}
+}
+// with the values: 
+{ idText: '5', idNumber: 4, idBoolTrue: true, idBoolFalse: false, idOther: {x: 1}
+
 
 
 
