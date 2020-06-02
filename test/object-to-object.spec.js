@@ -249,18 +249,27 @@ describe('object-to-object',  () => {
     });
 
     it ('remove empty - length', () => {
-      let conv = new Obj.ObjectToObject({
+      let config = {
         emptyCheck: 'length',
         fields: {
           location: {
             street: "StreetName",
             city: "City",
-            countryCode: "City|length > 0 ? 'NL' : ''"
-          }
+            countryCode: "City|length > 0 ? 'NL' : ''",
+          },
+          value: 'Value'
         }
-      });
-      let r = conv.convert({CustomerId: '12345', StreetName: '', City: ''});
+      };
+      let conv = new Obj.ObjectToObject(config);
+      let r = conv.convert({CustomerId: '12345', StreetName: '', City: '', Value: 'not'});
       assert(r.location === undefined, 'created field');
+
+      config.emptyCheck = 'none';
+      conv = new Obj.ObjectToObject(config);
+      r = conv.convert({CustomerId: '12345', StreetName: '', City: '', Value: ''});
+      assert.equal(r.value, '', 'empty');
+      r = conv.convert({CustomerId: '12345', StreetName: '', City: '', Value: undefined});
+      assert.equal(r.value, undefined, 'empty');
     });
 
     it('nested elements', () => {

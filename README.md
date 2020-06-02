@@ -153,7 +153,7 @@ let config = {
 }
 // with the values: 
 { idText: '5', idNumber: 4, idBoolTrue: true, idBoolFalse: false, idOther: {x: 1}
-
+````
 
 
 
