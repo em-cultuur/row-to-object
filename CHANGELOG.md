@@ -5,6 +5,7 @@
 - better message when 'TypeError'
 - add padStart
 - better asString
+- emptyCheck is default 'none'. Only accepts: none, length, undefined
 
 ## 2020-05-29
 - add: options.evalString. if set and the value of object is equal the text is intepreted as eval otherwise as string

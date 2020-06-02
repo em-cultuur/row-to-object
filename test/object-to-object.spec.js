@@ -235,6 +235,7 @@ describe('object-to-object',  () => {
     it ('remove empty', () => {
       let conv = new Obj.ObjectToObject({
         idField: 'testId',
+        emptyCheck: 'length',
         fields: {
           location: {
             street: "City == 'Rotterdam' ? undefined : StreetName",
@@ -325,6 +326,7 @@ describe('object-to-object',  () => {
     it('remove if empty', () => {
       let conv = new Obj.ObjectToObject({
         idField: 'testId',
+        emptyCheck: 'length',
         fields: {
           location: [{
             street: "City == 'Rotterdam' ? undefined : StreetName",

@@ -281,6 +281,7 @@ describe('row-to-object 2',  () => {
     it ('remove empty', () => {
       let conv = new RtoO.RowToObject({
         firstRow: 'fieldName', idField: 'testId',
+        emptyCheck: 'length',
         fields: {
           location: {
             street: "City == 'Rotterdam' ? undefined : StreetName",
@@ -332,6 +333,7 @@ describe('row-to-object 2',  () => {
     it('remove if empty', () => {
       let conv = new RtoO.RowToObject({
         firstRow: 'fieldName', idField: 'testId',
+        emptyCheck: 'length',
         fields: {
           location: [{
             street: "City == 'Rotterdam' ? undefined : StreetName",
@@ -641,6 +643,7 @@ describe('row-to-object 2',  () => {
 
     before( () => {
       conv = new RtoO.RowToObject({
+        emptyCheck: 'length',
         fields: {
           id: "idField",
           contact: [
@@ -655,6 +658,7 @@ describe('row-to-object 2',  () => {
         }
       });
       conv2 = new RtoO.RowToObject({
+        emptyCheck: 'length',
         fields: {
           id: "idField",
           contact: [
