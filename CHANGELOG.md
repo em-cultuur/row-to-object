@@ -1,7 +1,7 @@
 # row to object
 ## revisions
 
-@@2020-06-022
+@@2020-06-02
 - added the $$IF statement with (see object-to-object.spec for examples)
 
 ## 2020-05-31
