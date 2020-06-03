@@ -157,6 +157,10 @@ let config = {
 
 
 
+
+## looping
+To process arrays the loop can be used. Loop are defined als normal variables.
+
 The last **arrayObject** does a filter on the array. The statement [.last == "Doe"] filters all elements that have
 "Doe" as last. More information on filtering can be found in the [Jexl documentation](https://www.npmjs.com/package/jexl)
 ```javascript
@@ -177,7 +181,7 @@ let  code = {
   }
 ```
 The parts of the loop construct:
-* $$LOOP - this defines that a loop is defined :)) It's case-sensitive and the result will be added to the parent (code in this case)
+* $$LOOP - (can be changed by **markers.loopStatement**) this defines that a loop is defined :)) It's case-sensitive and the result will be added to the parent (code in this case)
 * count - the total number of time the itteration has to be done. The current index is defined by the $$INDEX variable. 
 If there are multiple indexes the name can be defined by the index property
 * block - the part that will be repeated count times. 
@@ -185,9 +189,35 @@ If there are multiple indexes the name can be defined by the index property
 possible to add extra code elements to the array. Its the 'normal' contact from the code
 
 
-## looping
-To process arrays the loop can be used. Loop are defined als normal variables.
+## if
+The conditional is can be used to select between different values. The default marker is $$IF (can be changed
+by setting the **markers.ifStatment**). The key **condition** (can be changed by markers.condition) is used to evaluate the statement. 
+The result value of the evaluation is used to find the part that will be return. If no value matches the **default** 
+(can be changed by setting **markers.default**) is used. 
 
+```javascript
+ let conv = {
+    markers: {ifStatement: '=if'},
+    fields: {
+      // compare can be an array or just a value.
+      compare: {
+        '=if': {
+          condition: "elem | length",
+          1: {
+            text: "'there is one element'"
+          },
+          0:  {
+            text: "'there are no elements'"
+          },
+          'default': {
+            text: "'there are multiple elements'"
+          }
+        }
+      }
+    }
+  }
+```
+If none matches and there is no default, the entire structure isn't added
 
 ## Configuring
 The conversion from the row (array) to an object is done by an configuration object. For every

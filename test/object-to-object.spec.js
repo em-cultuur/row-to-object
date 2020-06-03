@@ -545,8 +545,31 @@ describe('object-to-object',  () => {
       assert.equal(r.boolFalse, '00000' )
       assert.equal(r.other.toString(), {x:1}.toString() )
     })
-
   });
+
+  describe('undefined variable', () => {
+    it('string', () => {
+      let config ={
+        emptyCheck: 'none',
+        allowNotDefined: false,
+        fields: {
+          text: "idText",
+        }};
+      let conv =  new Obj.ObjectToObject(config);
+      let r;
+      try {
+        r = conv.convert({id: '5'});
+        assert.fail('should throw error')
+      } catch (e) {
+        assert.equal(e.message, 'field (idText) was not found')
+      }
+      config.allowNotDefined = true;
+      conv =  new Obj.ObjectToObject(config);
+      r = conv.convert({id: '5'});
+      assert.isUndefined(r.text)
+    })
+  });
+
 
   describe('loop', () => {
     it('string', () => {
@@ -571,6 +594,111 @@ describe('object-to-object',  () => {
       assert.equal(r.code.length, 2)
     });
   })
+
+  describe('if', () => {
+    it('true/false', () => {
+      let conv = new Obj.ObjectToObject({
+        fields: {
+          // compare can be an array or just a value.
+          compare: {
+            $$IF: {
+              condition: "val1 > val2",
+              true: {
+                text: "'val1  is more then val2'"
+              },
+              false:  {
+                text: "'val1  is less then val2'"
+              }
+            }
+          }
+        }
+      });
+      // true test are in the row-to-object definition
+      let r = conv.convert({ val1: '10', val2: '20'});
+      assert.equal(r.compare.text, 'val1  is less then val2')
+      r = conv.convert({ val1: '30', val2: '20'});
+      assert.equal(r.compare.text, 'val1  is more then val2')
+    });
+
+    it('other marker statement', () => {
+      let conv = new Obj.ObjectToObject({
+        markers: {ifStatement: 'if'},
+        fields: {
+          // compare can be an array or just a value.
+          compare: {
+            'if': {
+              condition: "val1 > val2",
+              true: {
+                text: "'val1  is more then val2'"
+              },
+              false:  {
+                text: "'val1  is less then val2'"
+              }
+            }
+          }
+        }
+      });
+      // true test are in the row-to-object definition
+      let r = conv.convert({ val1: '10', val2: '20'});
+      assert.equal(r.compare.text, 'val1  is less then val2')
+      r = conv.convert({ val1: '30', val2: '20'});
+      assert.equal(r.compare.text, 'val1  is more then val2')
+    });
+
+    it('case statement', () => {
+      let conv = new Obj.ObjectToObject({
+        markers: {ifStatement: 'if'},
+        fields: {
+          // compare can be an array or just a value.
+          compare: {
+            'if': {
+              condition: "elem | length",
+              1: {
+                text: "'there is one element'"
+              },
+              0:  {
+                text: "'there are no elements'"
+              },
+              'default': {
+                text: "'there are multiple elements'"
+              }
+            }
+          }
+        }
+      });
+      // true test are in the row-to-object definition
+      let r = conv.convert({ elem: []});
+      assert.equal(r.compare.text, 'there are no elements')
+      r = conv.convert({ elem: ['a']});
+      assert.equal(r.compare.text, 'there is one element')
+      r = conv.convert({ elem: ['a', 'b']});
+      assert.equal(r.compare.text, 'there are multiple elements')
+    });
+
+    it('case statement no default', () => {
+      let conv = new Obj.ObjectToObject({
+        markers: {ifStatement: 'if'},
+        fields: {
+          // compare can be an array or just a value.
+          compare: {
+            'if': {
+              condition: "elem | length",
+              1: {
+                text: "'there is one element'"
+              },
+              0:  {
+                text: "'there are no elements'"
+              }
+            }
+          }
+        }
+      });
+      // true test are in the row-to-object definition
+      let r = conv.convert({ elem: ['a', 'b']});
+      assert.isUndefined(r.compare)
+    });
+  })
+
 
   describe('standard === string', () => {
     it('string', () => {
