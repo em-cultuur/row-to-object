@@ -593,6 +593,31 @@ describe('object-to-object',  () => {
       let r = conv.convert({ arrayField: 'val1, val2'});
       assert.equal(r.code.length, 2)
     });
+    it('index fieldname', () => {
+      let conv = new Obj.ObjectToObject({
+        markers: {
+          loopStatement: '=loop',
+          index: 'index',
+          evalString: '='
+        },
+        fields: {
+          // arrayField: "arrayField | split(',')",
+          code: {
+            '=loop': [{
+              count: "= arrayField | split(',') | length",
+              block: {
+                name: "= arrayField | split(',') [index]",
+                text: "= index"
+              }
+            }]
+          }
+        }
+      });
+      // true test are in the row-to-object definition
+      let r = conv.convert({ arrayField: 'val1, val2'});
+      assert.equal(r.code.length, 2)
+      assert.equal(r.code[1].text, '1')
+    });
   })
 
   describe('if', () => {
