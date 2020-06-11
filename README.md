@@ -276,6 +276,46 @@ This will generate an object:
 ````  
 If the field has the _required flag and has no value, the entire object will be removed
  
+## key
+When filtering a specific record the problem arises what happens if not found. For this the **key** options is
+available. With this the default value and what to return if not found can be set:
+```javascript
+  it('object', () => {
+      let config ={
+        emptyCheck: 'none',
+        allowNotDefined: false,
+        fields: {
+          text: "contact[._key == 'main'].name",
+          text2: "contact[._key == 'contact'] | key('name', '-- not found --')",
+          text3: "contact[._key == 'contact'] | key(false, {name: '-- not found --'}).name",
+        }};
+      let conv =  new Obj.ObjectToObject(config);
+      let r;
+      r = conv.convert({contact: [
+          { _key: 'main', name: 'john'},
+          { _key: 'contact', name: 'jane'}
+      ]});
+      assert.equal(r.text, 'john');
+      assert.equal(r.text2, 'jane')
+
+      r = conv.convert({contact: [
+          { _key: 'main', name: 'john'},
+          { _key: 'WRONG', name: 'jane'}
+        ]});
+      assert.equal(r.text, 'john');
+      assert.equal(r.text2, '-- not found --', 'returns a default value')
+
+      r = conv.convert({contact: [
+          { _key: 'main', name: 'john'},
+          { _key: 'WRONG', name: 'jane'}
+        ]});
+      assert.equal(r.text, 'john');
+      assert.equal(r.text3, '-- not found --', 'returns an object')
+```  
+
+The general format is: key([fieldname], [default value]);
+* fieldname. The name of the field. If set to False the entire structure of that field is returned
+* default value the value to return if nothing is found. This can be a string or a structure.
 
 ### array of fields
 An array can be contructed from the row by declaring the field as an array. Example:

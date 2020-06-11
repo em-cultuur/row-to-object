@@ -567,8 +567,43 @@ describe('object-to-object',  () => {
       conv =  new Obj.ObjectToObject(config);
       r = conv.convert({id: '5'});
       assert.isUndefined(r.text)
+    });
+
+    it('object', () => {
+      let config ={
+        emptyCheck: 'none',
+        allowNotDefined: false,
+        fields: {
+          text: "contact[._key == 'main'].name",
+          text2: "contact[._key == 'contact'] | key('name', '-- not found --')",
+          text3: "contact[._key == 'contact'] | key(false, {name: '-- not found --'}).name",
+        }};
+      let conv =  new Obj.ObjectToObject(config);
+      let r;
+      r = conv.convert({contact: [
+          { _key: 'main', name: 'john'},
+          { _key: 'contact', name: 'jane'}
+      ]});
+      assert.equal(r.text, 'john');
+      assert.equal(r.text2, 'jane')
+
+      r = conv.convert({contact: [
+          { _key: 'main', name: 'john'},
+          { _key: 'WRONG', name: 'jane'}
+        ]});
+      assert.equal(r.text, 'john');
+      assert.equal(r.text2, '-- not found --', 'returns a default value')
+
+      r = conv.convert({contact: [
+          { _key: 'main', name: 'john'},
+          { _key: 'WRONG', name: 'jane'}
+        ]});
+      assert.equal(r.text, 'john');
+      assert.equal(r.text3, '-- not found --', 'returns an object')
+
     })
   });
+
 
 
   describe('loop', () => {
