@@ -128,7 +128,7 @@ let config = {
     "shortGuid": "'c' + (telephone | guid(19))" // generate c + 19 byte md5
 }
 ```
-## split
+## slott
 examples:
 ```javascript
 let telephone = 'Some Textual'

@@ -3,6 +3,7 @@
 
 ## 2020-06-11
 - added the key options to filter definitions
+- fix: key([name], default value) if default is undefined, object is returned otherwise default value
 
 ## 2020-06-02
 - added the $$IF statement with (see object-to-object.spec for examples)
