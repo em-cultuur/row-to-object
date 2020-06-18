@@ -117,6 +117,15 @@ let config = {
     "first": "telephone | replace('Some', 'No')",         // 'No Textuals'
 }
 ```
+## case changing
+examples:
+```javascript
+let telephone = 'Some Textual'
+let config = {
+    "fiRst": "telephone | toUpperCase",         // 'FIRST',
+    "fiRst": "telephone | toLowerCase",         // 'first'
+}
+```
 
 ## guid creation
 examples:

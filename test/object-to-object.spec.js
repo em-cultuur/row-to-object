@@ -777,4 +777,19 @@ describe('object-to-object',  () => {
     });
   });
 
+  describe('lower / upper', () => {
+    it('string', () => {
+      let conv = new Obj.ObjectToObject({
+        emptyCheck: 'none',
+        fields: {
+          resultUpper: "text | toUpperCase",
+          resultLower: "text | toLowerCase",
+
+        }});
+      let r = conv.convert({ text: 'tEst'});
+      assert.equal(r.resultUpper, 'TEST');
+      assert.equal(r.resultLower, 'test');
+    });
+  });
+
 });
