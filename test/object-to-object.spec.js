@@ -602,6 +602,38 @@ describe('object-to-object',  () => {
       assert.equal(r.text3, '-- not found --', 'returns an object')
 
     })
+
+    it('complex key', () => {
+      let config ={
+        emptyCheck: 'none',
+        allowNotDefined: false,
+        fields: {
+          "name": "contact[._key == 'contact'] | key(['firstName', 'firstLetters'], '') + (contact[._key == 'contact'] | key('namePrefix', '') | slot(' ') ) + contact[._key == 'contact'] | key('name') | slot(' ')",
+          "department": "contact[._key == 'main'] | key('organisation')",
+          "order": "contact[._key == 'main'] | key('organisation', '') | slot(false, ' -- ') + contact[._key == 'contact'] | key('name')"
+        }};
+      let conv =  new Obj.ObjectToObject(config);
+      let r = conv.convert({"contact": [
+        {
+          "locator": {
+            "fullName": "Facilitair Bureau Adjdir. (afd)"
+          },
+          "organisation": "Facilitair Bureau Adjdir. (afd)",
+          "_key": "main",
+          "typeId": "101"
+        },
+        {
+          "name": "Elitok",
+          "firstLetters": "A.",
+          "function": "Schoonmaker",
+          "_parent": "main",
+          "_key": "contact"
+        }
+      ]});
+      assert.equal(r.department, 'Facilitair Bureau Adjdir. (afd)');
+      assert.equal(r.name, 'A. Elitok')
+      assert.equal(r.order, 'Facilitair Bureau Adjdir. (afd) -- Elitok')
+    })
   });
 
 

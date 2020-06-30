@@ -1,6 +1,9 @@
 # row to object
 ## revisions
 
+## 20202-06-30
+- added key(['fieldname', 'fieldname']) to dynamic select the proper field
+
 ## 2020-06-11
 - added the key options to filter definitions
 - fix: key([name], default value) if default is undefined, object is returned otherwise default value
