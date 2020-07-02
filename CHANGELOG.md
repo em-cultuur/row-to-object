@@ -1,6 +1,9 @@
 # row to object
 ## revisions
 
+##
+- add: nl2br test
+
 ## 20202-06-30
 - added key(['fieldname', 'fieldname']) to dynamic select the proper field
 

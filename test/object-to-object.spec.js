@@ -823,5 +823,17 @@ describe('object-to-object',  () => {
       assert.equal(r.resultLower, 'test');
     });
   });
+  describe('nl2br', () => {
+    it('string', () => {
+      let conv = new Obj.ObjectToObject({
+        emptyCheck: 'none',
+        fields: {
+          "type": "'relatiememo'",
+          "description" : "Notitie | nl2br(true)",
 
+        }});
+      let r = conv.convert({ Notitie: 'no way\ntoo'});
+      assert.equal(r.description, 'no way<br />\ntoo');
+    });
+  });
 });
