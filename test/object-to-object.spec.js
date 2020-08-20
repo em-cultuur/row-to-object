@@ -31,13 +31,25 @@ describe('object-to-object',  () => {
         fields: {
           "data1": "value | Object[0]",
           "data2": "value | Object[1]",
-          "data3": "value | Object[2]"
+          "data3": "value | Object[2]",
+          "def1": "value2 | Object([9])[0]",
+          "def2": "value2 | Object[0]"
         }
       });
-      let r = conv.convert({value: '[1, 4]'});
+      // test with string
+      let r = conv.convert({value: '[1, 4]', value2: '[val]'});
+      assert.equal(r.data1, 1, 'did it');
+      assert.equal(r.data2, 4, 'did it');
+      assert.isUndefined(r.data3, 'no value === undefined');
+      assert.equal(r.def1, 9, 'on use a different value')
+      assert.isUndefined(r.def2)
+
+      // test with values
+      r = conv.convert({value: [1, 4],  value2: '[val]'});
       assert.equal(r.data1, 1, 'did it');
       assert.equal(r.data2, 4, 'did it');
       assert.isUndefined(r.data3, 'no value === undefined')
+
     });
     it('string to object', () => {
       let conv = new Obj.ObjectToObject({
