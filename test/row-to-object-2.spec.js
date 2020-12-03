@@ -617,7 +617,8 @@ describe('row-to-object 2',  () => {
           text: "textField | md5 ",
           guid: "textField | guid",
           length: "textField | guid | length",
-          shortGuid: "'c' + (textField | guid(19))"
+          shortGuid: "'c' + (textField | guid(19))",
+          numberField: "2 | guid(19)"
 
         }
       });
@@ -630,6 +631,9 @@ describe('row-to-object 2',  () => {
       assert.equal(r.length, 20);
       assert.equal(r.guid, '22F23S6M94BO04SGSCWS');
       assert.equal(r.shortGuid, 'c' + '22F23S6M94BO04SGSCWS'.substr(0,19));
+      assert.isTrue(r.numberField != 2);
+      assert.equal(r.numberField, '9DM3FUVTYZ8C04SW408')
+
     })
 
   });

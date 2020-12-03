@@ -1,6 +1,9 @@
 # row to object
 ## revisions
 
+2020-12-03
+- fix: number | guid() does not return the guid but the number
+
 ## 2020-08-20
 - chg: Object(defaultValue) convert JSON to Object. When error returns defaultValue. If not string it return the existing value.
 
