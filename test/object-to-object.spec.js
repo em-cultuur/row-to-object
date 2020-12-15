@@ -672,6 +672,37 @@ describe('object-to-object',  () => {
       let r = conv.convert({ arrayField: 'val1, val2'});
       assert.equal(r.code.length, 2)
     });
+
+    it('loop index', () => {
+      let conv = new Obj.ObjectToObject({
+        fields: {
+          // arrayField: "arrayField | split(',')",
+          email: {
+            "$$LOOP": [
+              {
+                "count": "field['e-mailadres'] | split(';') | length",
+                "block": {
+                  "email": "field['e-mailadres'] | split(';')[$$INDEX]",
+                  "typeId": "$$INDEX == 0 ? 115 : $$INDEX == 1 ? 120 : 150",
+                  "_parent": "'contact'"
+                }
+              }
+            ]
+          }
+        }
+      });
+      // true test are in the row-to-object definition
+      let r = conv.convert({ 'e-mailadres': 'j1@test.com;j2@test.com;j3@test.com'});
+      assert.equal(r.email.length, 3)
+      assert.equal(r.email[0].typeId, 115)
+      assert.equal(r.email[0].email, 'j1@test.com')
+      assert.equal(r.email[1].typeId, 120)
+      assert.equal(r.email[1].email, 'j2@test.com')
+      assert.equal(r.email[2].typeId, 150)
+      assert.equal(r.email[2].email, 'j3@test.com')
+    });
+
+
     it('index fieldname', () => {
       let conv = new Obj.ObjectToObject({
         markers: {

@@ -1,7 +1,10 @@
 # row to object
 ## revisions
 
-2020-12-03
+## 2020-12-15
+- chg: $$INDEX is replace every where
+
+## 2020-12-03
 - fix: number | guid() does not return the guid but the number
 
 ## 2020-08-20
