@@ -408,13 +408,13 @@ describe('object-to-object',  () => {
         fields: {
           id: "SomeField",
           d: "create | date",
-          d2: "dA | date('MM-DD-YYYY')",
+          d2: "dA | date(['MM-DD-YYYY', 'YYYY-MM-DD'])", // first is the layout request second is layout input
         }
       });
-      let r = conv.convert({ SomeField: 'some', create: "02-03-1980", dA: "03-02-1980"});
+      let r = conv.convert({ SomeField: 'some', create: "14-03-1980", dA: "1980-03-14"});
       assert.isDefined(r.d, 'did return');
-      assert.equal(r.d, '1980-03-02T00:00:00+01:00', 'europe date');
-      assert.equal(r.d2, '1980-03-02T00:00:00+01:00', 'us date');
+      assert.equal(r.d, '1980-03-14', 'europe date');
+      assert.equal(r.d2, '03-14-1980', 'us date');
     });
 
     it('calculate', () => {
@@ -423,14 +423,14 @@ describe('object-to-object',  () => {
         fields: {
           id: "SomeField",
           d1: "create | date",
-          d2: "create | date | dateAdd('7', 'days')",
-          d3: "create | date | dateSubract(1, 'month')",
+          d2: "create | date | dateAdd('7', 'days') | date",
+          d3: "create | date | dateSubtract(1, 'month') | date",
         }
       });
       let r = conv.convert({ SomeField: 'some', create: "02-03-1980"});
-      assert.equal(r.d1, '1980-03-02T00:00:00+01:00', 'one week');
-      assert.equal(r.d2, '1980-03-09T00:00:00+01:00', 'one week');
-      assert.equal(r.d3, '1980-02-02T00:00:00+01:00', 'one month');
+      assert.equal(r.d1, '1980-03-02', 'one week');
+      assert.equal(r.d2, '1980-03-09', 'one week');
+      assert.equal(r.d3, '1980-02-02', 'one month');
     });
 
     it('dutch', () => {

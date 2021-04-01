@@ -1,6 +1,11 @@
 # row to object
 ## revisions
 
+## 2020-04-01  (1.0.0)
+- fix: date formating does not work as expected
+- chg: date(format) where format is string or array. First is layout, others are possible layouts (default YYYY-MM-DD)  
+- fix: dateSubract is now dateSubtract (typo)
+
 ## 2020-12-15
 - chg: $$INDEX is replace every where
 
