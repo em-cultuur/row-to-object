@@ -1,6 +1,10 @@
 # row to object
 ## revisions
 
+## 2020-04-08
+- timezone problems. Updated languages
+- add timezone to Date(format, timezone) definition
+
 ## 2020-04-01  (1.0.0)
 - fix: date formating does not work as expected
 - chg: date(format) where format is string or array. First is layout, others are possible layouts (default YYYY-MM-DD)  

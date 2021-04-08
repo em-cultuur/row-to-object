@@ -484,10 +484,15 @@ describe('object-to-object',  () => {
         idField: 'testId',
         fields: {
           "code": "'import:' + __date | dateFormat('LL')",
+          "timeLondon": "__date | date('YYYY-MM-DD HH:mm:ss' , 'Europe/London')",
+          "timeAmsterdam": "__date | date('YYYY-MM-DD HH:mm:ss' , 'Europe/Amsterdam')"
         }
       });
+      let h = new Date().getHours().toString();
       let r = conv.convert({code: 'some',});
       assert.include(r.code, 'import:' , 'did it')
+      assert.equal(r.timeAmsterdam.substr(11, 2), h)
+      assert.equal(r.timeLondon.substr(11, 2), h - 1 )
     });
   });
 
