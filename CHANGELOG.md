@@ -1,6 +1,10 @@
 # row to object
 ## revisions
 
+## 2022-04-14
+- fix: test hours should be 09 not 9
+- upd: updated it
+
 ## 2020-04-08
 - timezone problems. Updated languages
 - add timezone to Date(format, timezone) definition

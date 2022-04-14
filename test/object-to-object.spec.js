@@ -491,7 +491,7 @@ describe('object-to-object',  () => {
       let h = new Date().getHours().toString();
       let r = conv.convert({code: 'some',});
       assert.include(r.code, 'import:' , 'did it')
-      assert.equal(r.timeAmsterdam.substr(11, 2), h)
+      assert.equal(r.timeAmsterdam.substr(11, 2), String(h).padStart(2, '0'))
       assert.equal(r.timeLondon.substr(11, 2), h - 1 )
     });
   });
