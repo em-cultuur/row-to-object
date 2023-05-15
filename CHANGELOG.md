@@ -1,6 +1,9 @@
 # row to object
 ## revisions
 
+## 2023-05-15 (1.1.2) JdJ
+- fix: when adding same object in $$LOOP, discard.
+
 ## 2022-04-14
 - fix: test hours should be 09 not 9
 - upd: updated it
