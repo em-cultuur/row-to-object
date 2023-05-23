@@ -1,6 +1,9 @@
 # row to object
 ## revisions
 
+## 2023-05-23 (1.1.3) JdJ
+- fix: when adding undefined/null in $$LOOP, discard.
+
 ## 2023-05-15 (1.1.2) JdJ
 - fix: when adding same object in $$LOOP, discard.
 
