@@ -1,6 +1,9 @@
 # row to object
 ## revisions
 
+## 2023-06-01 (1.1.4) JdJ
+- chg: small addition: asString can have a separator, will use join().
+
 ## 2023-05-23 (1.1.3) JdJ
 - fix: when adding undefined/null in $$LOOP, discard.
 
